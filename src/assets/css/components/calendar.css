@@ -1,0 +1,72 @@
+body {
+  .Kalend__main * {
+    @apply font-body;
+  }
+  .Kalend__CalendarHeader-tall,
+  .Kalend__CalendarHeader,
+  .Kalend__CalendarHeader-dark,
+  .Kalend__CalendarHeader-tall,
+  .Kalend__CalendarHeader-tall-dark,
+  .Kalend__CalendarHeader-day,
+  .Kalend__CalendarHeader-tall-day {
+    @apply rounded-none border-b border-gray-200 bg-blue-500 py-3 pb-0 text-white shadow-none;
+  }
+  .Kalend__CalendarHeader-small {
+    @apply rounded-none border-b border-gray-200 bg-blue-500 py-1 pb-0 text-white shadow-none;
+    .Kalend__CalendarHeaderWeekDays__text{
+      @apply text-white;
+    }
+  }
+  .Kalend__AgendaDayRow__container-day{
+    .Kalend__CalendarHeaderDates__text{
+      @apply text-gray-500;
+    }
+  }
+  .Kalend__CalendarHeaderWeekDays__text {
+    @apply text-white;
+  }
+  .Kalend__CalendarHeaderDates__text {
+    @apply text-white;
+  }
+  .Kalend__CalendarDesktopNavigation__container {
+    @apply rounded-none bg-blue-200;
+  }
+  .Kalend__CalendarHeaderDates__circle:hover {
+    @apply bg-blue-700;
+  }
+  .Kalend__ButtonIcon:hover {
+    @apply bg-blue-400;
+  }
+  .Kalend__CalendarHeaderWeekDays__wrapper {
+    .Kalend__CalendarHeaderWeekDays__text {
+      @apply text-white;
+    }
+  }
+  .Kalend__HeaderCalendarTitle,
+  .Kalend__ButtonBase,
+  .Kalend__header_calendar_button-text {
+    @apply text-blue-600;
+  }
+  .Kalend__ButtonIcon,
+  .Kalend__ButtonIcon:hover,
+  .Kalend__ButtonIcon-dark,
+  .Kalend__ButtonIcon-dark:hover,
+  .Kalend__ButtonIcon-inactive,
+  .Kalend__ButtonIcon-inactive:active,
+  .Kalend__ButtonIcon-inactive:hover,
+  .Kalend__ButtonIcon__svg,
+  .Kalend__ButtonIcon__svg-normal,
+  .Kalend__ButtonIcon__svg-normal-dark,
+  .Kalend__ButtonIcon__svg-dark {
+    @apply fill-blue-500;
+  }
+  .Kalend__CalendarHeaderDates__circle-small,
+  .Kalend__CalendarHeaderDates__circle-small:hover,
+  .Kalend__CalendarHeaderDates__circle-small-dark,
+  .Kalend__CalendarHeaderDates__circle-small-dark:hover,
+  .Kalend__CalendarHeaderWeekDays__col {
+    p {
+      @apply text-gray-500;
+    }
+  }
+}

@@ -1,0 +1,22 @@
+diff --git a/node_modules/next/types/index.d.ts b/node_modules/next/types/index.d.ts
+index 6d1f9d4..ca744e4 100644
+--- a/node_modules/next/types/index.d.ts
++++ b/node_modules/next/types/index.d.ts
+@@ -130,7 +130,7 @@ export type GetStaticPropsContext<
+   params?: Q
+   preview?: boolean
+   previewData?: D
+-  locale?: string
++  locale: string
+   locales?: string[]
+   defaultLocale?: string
+ }
+@@ -180,7 +180,7 @@ export type GetServerSidePropsContext<
+   preview?: boolean
+   previewData?: D
+   resolvedUrl: string
+-  locale?: string
++  locale: string
+   locales?: string[]
+   defaultLocale?: string
+ }
