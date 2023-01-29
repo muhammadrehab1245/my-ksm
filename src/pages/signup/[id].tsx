@@ -47,11 +47,10 @@ export default function Signup() {
       is: (nat: string) => nat === 'JP',
       then: (schema) => schema.required(t('required')),
     }),
-    cardNumber: string().when('payment_method', {
+    cardNumber: string().when('paymentMethod', {
       is: (pm: string) => pm === 'card',
       then: (schema) => schema.required(t('required')),
     }),
-    acceptTos: boolean().oneOf([true], 'Accept terms and conditions'),
   });
 
   const {
