@@ -31,7 +31,7 @@ export default function Signup() {
   }, [data, query.id]);
 
   const schema = object({
-    email: string().email().required(t('required')),
+    email: string().email(t('emailRequired')).required(t('required')),
     firstName: string().required(t('required')),
     lastName: string().required(t('required')),
     gender: string().required(t('required')),

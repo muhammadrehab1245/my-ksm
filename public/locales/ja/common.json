@@ -18,6 +18,7 @@
   "basicInfo": "基本情報",
   "email": "メールアドレス",
   "emailPlaceholder": "例：abcde@email.com",
+  "emailRequired": "電子メールは有効な電子メールである必要があります",
   "lastName": "姓",
   "lastNamePlaceholder": "例：山田",
   "firstName": "名",
