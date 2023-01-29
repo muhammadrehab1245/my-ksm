@@ -5,7 +5,7 @@ export const Header = () => {
     <header>
       <div className="container text-center">
         <Link className="inline-block" href="/">
-          <img src="/images/logo.svg" alt="logo" />
+          <img className="h-20" src="/images/logo.svg" alt="logo" />
         </Link>
       </div>
     </header>
