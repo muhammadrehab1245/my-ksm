@@ -4,6 +4,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Button } from '@mantine/core';
 import { usePlans } from '@/hooks/fetch';
 import { Skeleton } from '@/components';
+import Link from 'next/link';
 
 export default function Subscription() {
   const { t } = useTranslation();
@@ -23,7 +24,7 @@ export default function Subscription() {
         </div>
         <div className="container relative z-10 -mt-8 grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
           {data ? (
-            data.map(({ name, monthlyFee, description, code }, index) => (
+            data.map(({ id, name, monthlyFee, description, code }, index) => (
               <div className="space-y-2 rounded-xl bg-white p-8 text-center" key={index}>
                 <div className="relative inline-block">
                   <img className="inline" src="/icons/mark.svg" alt="mark" />
@@ -35,7 +36,9 @@ export default function Subscription() {
                   <span className="pl-1 text-sm">{t('afterPrice')}</span>
                 </div>
                 <div dangerouslySetInnerHTML={{ __html: description }} />
-                <Button>{t('select')}</Button>
+                <Link href={`/signup/${id}`}>
+                  <Button>{t('select')}</Button>
+                </Link>
               </div>
             ))
           ) : (

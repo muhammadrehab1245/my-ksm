@@ -19,7 +19,7 @@ export default class _Document extends Document {
         <Head>
           <link rel="icon" href="/icons/favicon.ico" />
         </Head>
-        <body className="font-body">
+        <body className="bg-gray-100 font-body">
           <Main />
           <NextScript />
         </body>
