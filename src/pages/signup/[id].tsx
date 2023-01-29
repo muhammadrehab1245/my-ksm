@@ -1,5 +1,5 @@
-import type { Plan } from '@/types';
 import type { GetServerSideProps } from 'next';
+import type { Plan } from '@/types';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
@@ -10,7 +10,7 @@ import { DatePicker } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm, yupResolver } from '@mantine/form';
 import { Alert, Button, Modal, Radio, Select, TextInput } from '@mantine/core';
-import { boolean, date, object, string } from 'yup';
+import { date, object, string } from 'yup';
 import { usePlans } from '@/hooks/fetch';
 import { countries, http } from '@/utilities';
 import { Skeleton } from '@/components';

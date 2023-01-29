@@ -1,10 +1,10 @@
 import type { GetStaticProps } from 'next';
+import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Button } from '@mantine/core';
 import { usePlans } from '@/hooks/fetch';
 import { Skeleton } from '@/components';
-import Link from 'next/link';
 
 export default function Subscription() {
   const { t } = useTranslation();
