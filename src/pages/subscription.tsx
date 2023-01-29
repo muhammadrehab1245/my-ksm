@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 export default function Subscription() {
   const { t } = useTranslation();
-  const { data } = usePlans({ sortBy: 'code', sortDir: 'asc' });
+  const { data } = usePlans();
 
   return (
     <div className="flex h-screen flex-col bg-gray-100">

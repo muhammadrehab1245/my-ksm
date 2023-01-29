@@ -22,7 +22,7 @@ function useKey(path: string, params?: any) {
   return finalQuery ? `${path}?${queryString.stringify(finalQuery)}` : `${path}`;
 }
 
-export function usePlans(params?: object) {
+export function usePlans(params = { sortBy: 'code', sortDir: 'asc' }) {
   const key = useKey('/organizations/public/plans', params);
 
   const { data, error } = useSWR<Plans>(key, fetcher, { onErrorRetry });
