@@ -73,41 +73,44 @@ export default function Signup() {
     validate: yupResolver(schema),
   });
   const onSubmit = handleSubmit((values) => {
-    const { paymentMethod, gender, firstName, lastName, dob, nationality, zipCode, phone, address, cardNumber, expiryDate, cvv, cardholderName } =
-      values;
-    window.Multipayment.init('tshop00059388');
-    window.Multipayment.getToken(
-      {
-        cardno: cardNumber,
-        expire: expiryDate,
-        securitycode: cvv,
-        holdername: cardholderName,
-      },
-      function ({ resultCode, tokenObject: { token } }: { resultCode: string; tokenObject: { token: string } }) {
-        if (resultCode != '000') {
-          toast.error(t('cardError'));
-        } else {
-          http
-            .post('/organizations/public/subscribe', {
-              firstName,
-              lastName,
-              gender,
-              dob,
-              phone,
-              nationality,
-              zipCode,
-              address,
-              paymentMethod,
-              cardToken: token,
-            })
-            .then(() => {
-              toast.success(t('itemAdded'));
-              push('/success');
-            })
-            .catch((error) => toast.error(error.message));
-        }
-      },
-    );
+    const { paymentMethod, cardNumber, expiryDate, cvv, cardholderName } = values;
+    const { firstName, lastName, dob, gender, nationality, zipCode, phone, address } = values;
+
+    const data = { firstName, lastName, gender, dob, phone, nationality, zipCode, address, paymentMethod };
+
+    if (paymentMethod === 'card') {
+      window.Multipayment.init('tshop00059388');
+      window.Multipayment.getToken(
+        {
+          cardno: cardNumber,
+          expire: expiryDate,
+          securitycode: cvv,
+          holdername: cardholderName,
+        },
+        function ({ resultCode, tokenObject: { token } }: { resultCode: string; tokenObject: { token: string } }) {
+          if (resultCode != '000') {
+            toast.error(t('cardError'));
+          } else {
+            console.log(token);
+            http
+              .post('/organizations/public/subscribe', { ...data, cardToken: token })
+              .then(() => {
+                toast.success(t('itemAdded'));
+                push('/success');
+              })
+              .catch((error) => toast.error(error.message));
+          }
+        },
+      );
+    } else {
+      http
+        .post('/organizations/public/subscribe', data)
+        .then(() => {
+          toast.success(t('itemAdded'));
+          push('/success');
+        })
+        .catch((error) => toast.error(error.message));
+    }
   });
 
   return (
