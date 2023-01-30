@@ -15,6 +15,7 @@ import { usePlans } from '@/hooks/fetch';
 import { countries, http } from '@/utilities';
 import { Skeleton } from '@/components';
 import { FiCalendar, FiCheckCircle, FiChevronRight } from 'react-icons/fi';
+import 'dayjs/locale/ja';
 
 export default function Signup() {
   const { t } = useTranslation();
@@ -37,20 +38,14 @@ export default function Signup() {
     gender: string().required(t('required')),
     dob: date().required(t('required')),
     nationality: string().required(t('required')),
-    mobileNumber: string().required(t('required')),
+    phone: string().required(t('required')),
     paymentMethod: string().required(t('required')),
-    zipCode: string().when('nationality', {
-      is: (nat: string) => nat === 'JP',
-      then: (schema) => schema.required(t('required')),
-    }),
-    address: string().when('nationality', {
-      is: (nat: string) => nat === 'JP',
-      then: (schema) => schema.required(t('required')),
-    }),
-    cardNumber: string().when('paymentMethod', {
-      is: (pm: string) => pm === 'card',
-      then: (schema) => schema.required(t('required')),
-    }),
+    zipCode: string().when('nationality', { is: (nat: string) => nat === 'JP', then: (schema) => schema.required(t('required')) }),
+    address: string().when('nationality', { is: (nat: string) => nat === 'JP', then: (schema) => schema.required(t('required')) }),
+    cardNumber: string().when('paymentMethod', { is: (pm: string) => pm === 'card', then: (schema) => schema.required(t('required')) }),
+    expiryDate: string().when('paymentMethod', { is: (pm: string) => pm === 'card', then: (schema) => schema.required(t('required')) }),
+    cvv: string().when('paymentMethod', { is: (pm: string) => pm === 'card', then: (schema) => schema.required(t('required')) }),
+    cardholderName: string().when('paymentMethod', { is: (pm: string) => pm === 'card', then: (schema) => schema.required(t('required')) }),
   });
 
   const {
@@ -58,15 +53,61 @@ export default function Signup() {
     getInputProps: register,
     values,
     setFieldValue,
-  } = useForm({ initialValues: { firstName: '', lastName: '', nationality: 'JP', gender: 'MALE', acceptTos: false }, validate: yupResolver(schema) });
+  } = useForm({
+    initialValues: {
+      firstName: '',
+      lastName: '',
+      nationality: 'JP',
+      gender: 'MALE',
+      dob: '',
+      phone: '',
+      zipCode: '',
+      address: '',
+      paymentMethod: 'card',
+      cardNumber: '',
+      expiryDate: '',
+      cvv: '',
+      cardholderName: '',
+      acceptTos: false,
+    },
+    validate: yupResolver(schema),
+  });
   const onSubmit = handleSubmit((values) => {
-    http
-      .post('/organizations/public/subscribe', values)
-      .then(() => {
-        toast.success(t('itemAdded'));
-        push('/success');
-      })
-      .catch((error) => toast.error(error.message));
+    const { paymentMethod, gender, firstName, lastName, dob, nationality, zipCode, phone, address, cardNumber, expiryDate, cvv, cardholderName } =
+      values;
+    window.Multipayment.init('tshop00059388');
+    window.Multipayment.getToken(
+      {
+        cardno: cardNumber,
+        expire: expiryDate,
+        securitycode: cvv,
+        holdername: cardholderName,
+      },
+      function ({ resultCode, tokenObject: { token } }: { resultCode: string; tokenObject: { token: string } }) {
+        if (resultCode != '000') {
+          toast.error(t('cardError'));
+        } else {
+          http
+            .post('/organizations/public/subscribe', {
+              firstName,
+              lastName,
+              gender,
+              dob,
+              phone,
+              nationality,
+              zipCode,
+              address,
+              paymentMethod,
+              cardToken: token,
+            })
+            .then(() => {
+              toast.success(t('itemAdded'));
+              push('/success');
+            })
+            .catch((error) => toast.error(error.message));
+        }
+      },
+    );
   });
 
   return (
@@ -87,7 +128,7 @@ export default function Signup() {
               <Radio value="UNDISCLOSED" label={t('genderOptions.preferNotToSay')} />
             </Radio.Group>
             <DatePicker withAsterisk label={t('dob')} placeholder={t('datePlaceholder')} locale="ja" icon={<FiCalendar />} {...register('dob')} />
-            <TextInput withAsterisk label={t('mobileNumber')} placeholder={t('mobileNumberPlaceholder')} {...register('mobileNumber')} />
+            <TextInput withAsterisk label={t('phone')} placeholder={t('phone')} {...register('phone')} />
             <Select
               searchable
               withAsterisk
@@ -103,6 +144,18 @@ export default function Signup() {
               </div>
             )}
             <h3 className="h5">{t('paymentInformation')}</h3>
+            <Radio value="card" checked={values.paymentMethod === 'card'} label={t('creditCard')} onChange={register('paymentMethod').onChange} />
+            {values.paymentMethod === 'card' && (
+              <div className="ml-8 space-y-2">
+                <TextInput withAsterisk label={t('cardNumber')} placeholder={t('cardNumberPlaceholder')} {...register('cardNumber')} />
+                <div className="flex gap-2">
+                  <TextInput withAsterisk label={t('expiryDate')} placeholder={t('expiryDatePlaceholder')} {...register('expiryDate')} />
+                  <TextInput withAsterisk label={t('cvv')} placeholder={t('cvvPlaceholder')} {...register('cvv')} />
+                </div>
+                <TextInput withAsterisk label={t('cardholderName')} placeholder={t('cardholderNamePlaceholder')} {...register('cardholderName')} />
+              </div>
+            )}
+            <Radio value="bank" checked={values.paymentMethod === 'bank'} label={t('bankTransfer')} onChange={register('paymentMethod').onChange} />
             <h3 className="h5">{t('termsAndConditions')}</h3>
             <button
               className={clsx(
