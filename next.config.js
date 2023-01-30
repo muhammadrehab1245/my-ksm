@@ -8,4 +8,7 @@ module.exports = withBundleAnalyzer({
   poweredByHeader: false,
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
+  /*experimental: {
+    nextScriptWorkers: true,
+  },*/
 });
