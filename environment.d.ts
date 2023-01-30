@@ -6,6 +6,7 @@ declare global {
       NEXT_PUBLIC_HOTUS_ORG_ID: string;
       NEXT_PUBLIC_WATASHINO_ORG_ID: string;
       NEXT_PUBLIC_GMO_TOKEN: string;
+      NEXT_PUBLIC_GMO_SHOP_ID: string;
     }
   }
 }

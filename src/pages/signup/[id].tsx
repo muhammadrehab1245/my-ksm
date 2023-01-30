@@ -79,7 +79,7 @@ export default function Signup() {
     const data = { firstName, lastName, gender, dob, phone, nationality, zipCode, address, paymentMethod };
 
     if (paymentMethod === 'card') {
-      window.Multipayment.init('tshop00059388');
+      window.Multipayment.init(process.env.NEXT_PUBLIC_GMO_SHOP_ID);
       window.Multipayment.getToken(
         {
           cardno: cardNumber,
@@ -91,7 +91,6 @@ export default function Signup() {
           if (resultCode != '000') {
             toast.error(t('cardError'));
           } else {
-            console.log(token);
             http
               .post('/organizations/public/subscribe', { ...data, cardToken: token })
               .then(() => {
