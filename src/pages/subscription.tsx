@@ -22,7 +22,7 @@ export default function Subscription() {
             </div>
           </div>
         </div>
-        <div className="container relative z-10 -mt-8 grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
+        <div className="relative z-10 mx-auto -mt-8 grid max-w-[1400px] gap-4 px-8 lg:grid-cols-2 xl:grid-cols-4">
           {data ? (
             data.map(({ id, name, monthlyFee, description, code }, index) => (
               <div className="space-y-2 rounded-xl bg-white p-8 text-center" key={index}>
