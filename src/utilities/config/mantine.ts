@@ -28,46 +28,6 @@ export const mantineTheme: MantineThemeOverride = {
         },
       }),
     },
-    Table: {
-      defaultProps: {
-        fontSize: 'md',
-      },
-    },
-    Input: {
-      defaultProps: {
-        size: 'md',
-      },
-    },
-    Textarea: {
-      defaultProps: {
-        size: 'md',
-      },
-    },
-    TextInput: {
-      defaultProps: {
-        size: 'md',
-      },
-    },
-    PasswordInput: {
-      defaultProps: {
-        size: 'md',
-      },
-    },
-    Select: {
-      defaultProps: {
-        size: 'md',
-      },
-    },
-    MultiSelect: {
-      defaultProps: {
-        size: 'md',
-      },
-    },
-    DatePicker: {
-      defaultProps: {
-        size: 'md',
-      },
-    },
   },
   globalStyles: (theme) => ({
     '.mantine-Input-input,.mantine-DateTimePicker-input,.mantine-DatePicker-input': {
