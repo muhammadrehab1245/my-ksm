@@ -55,11 +55,12 @@ export default function Signup() {
     setFieldValue,
   } = useForm({
     initialValues: {
+      email: '',
       firstName: '',
       lastName: '',
       nationality: 'JP',
       gender: 'MALE',
-      dob: '',
+      dob: undefined,
       phone: '',
       zipCode: '',
       address: '',
@@ -74,9 +75,22 @@ export default function Signup() {
   });
   const onSubmit = handleSubmit((values) => {
     const { paymentMethod, cardNumber, expiryDate, cvv, cardholderName } = values;
-    const { firstName, lastName, dob, gender, nationality, zipCode, phone, address } = values;
+    const { email, firstName, lastName, dob, gender, nationality, zipCode, phone, address } = values;
 
-    const data = { firstName, lastName, gender, dob, phone, nationality, zipCode, address, paymentMethod };
+    const data = {
+      email,
+      firstName,
+      lastName,
+      gender,
+      dob,
+      phone,
+      nationality,
+      zipCode,
+      address,
+      paymentMethod,
+      planId: query.id,
+      orgId: process.env.NEXT_PUBLIC_HOTUS_ORG_ID,
+    };
 
     if (paymentMethod === 'card') {
       window.Multipayment.init(process.env.NEXT_PUBLIC_GMO_SHOP_ID);
