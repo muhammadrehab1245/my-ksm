@@ -1,5 +1,5 @@
 export const config = {
   app: {
-    name: 'HotUs',
+    name: 'HOTUS',
   },
 };

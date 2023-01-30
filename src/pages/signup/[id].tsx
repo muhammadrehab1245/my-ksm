@@ -42,10 +42,10 @@ export default function Signup() {
     paymentMethod: string().required(t('required')),
     zipCode: string().when('nationality', { is: (nat: string) => nat === 'JP', then: (schema) => schema.required(t('required')) }),
     address: string().when('nationality', { is: (nat: string) => nat === 'JP', then: (schema) => schema.required(t('required')) }),
-    cardNumber: string().when('paymentMethod', { is: (pm: string) => pm === 'card', then: (schema) => schema.required(t('required')) }),
-    expiryDate: string().when('paymentMethod', { is: (pm: string) => pm === 'card', then: (schema) => schema.required(t('required')) }),
-    cvv: string().when('paymentMethod', { is: (pm: string) => pm === 'card', then: (schema) => schema.required(t('required')) }),
-    cardholderName: string().when('paymentMethod', { is: (pm: string) => pm === 'card', then: (schema) => schema.required(t('required')) }),
+    cardNumber: string().when('paymentMethod', { is: (pm: string) => pm === 'CARD', then: (schema) => schema.required(t('required')) }),
+    expiryDate: string().when('paymentMethod', { is: (pm: string) => pm === 'CARD', then: (schema) => schema.required(t('required')) }),
+    cvv: string().when('paymentMethod', { is: (pm: string) => pm === 'CARD', then: (schema) => schema.required(t('required')) }),
+    cardholderName: string().when('paymentMethod', { is: (pm: string) => pm === 'CARD', then: (schema) => schema.required(t('required')) }),
   });
 
   const {
@@ -55,15 +55,16 @@ export default function Signup() {
     setFieldValue,
   } = useForm({
     initialValues: {
+      email: '',
       firstName: '',
       lastName: '',
       nationality: 'JP',
       gender: 'MALE',
-      dob: '',
+      dob: undefined,
       phone: '',
       zipCode: '',
       address: '',
-      paymentMethod: 'card',
+      paymentMethod: 'CARD',
       cardNumber: '',
       expiryDate: '',
       cvv: '',
@@ -74,11 +75,24 @@ export default function Signup() {
   });
   const onSubmit = handleSubmit((values) => {
     const { paymentMethod, cardNumber, expiryDate, cvv, cardholderName } = values;
-    const { firstName, lastName, dob, gender, nationality, zipCode, phone, address } = values;
+    const { email, firstName, lastName, dob, gender, nationality, zipCode, phone, address } = values;
 
-    const data = { firstName, lastName, gender, dob, phone, nationality, zipCode, address, paymentMethod };
+    const data = {
+      email,
+      firstName,
+      lastName,
+      gender,
+      dob,
+      phone,
+      nationality,
+      zipCode,
+      address,
+      paymentMethod,
+      planId: query.id,
+      orgId: process.env.NEXT_PUBLIC_HOTUS_ORG_ID,
+    };
 
-    if (paymentMethod === 'card') {
+    if (paymentMethod === 'CARD') {
       window.Multipayment.init(process.env.NEXT_PUBLIC_GMO_SHOP_ID);
       window.Multipayment.getToken(
         {
@@ -146,8 +160,8 @@ export default function Signup() {
               </div>
             )}
             <h3 className="h5">{t('paymentInformation')}</h3>
-            <Radio value="card" checked={values.paymentMethod === 'card'} label={t('creditCard')} onChange={register('paymentMethod').onChange} />
-            {values.paymentMethod === 'card' && (
+            <Radio value="CARD" checked={values.paymentMethod === 'CARD'} label={t('creditCard')} onChange={register('paymentMethod').onChange} />
+            {values.paymentMethod === 'CARD' && (
               <div className="ml-8 space-y-2">
                 <TextInput withAsterisk label={t('cardNumber')} placeholder={t('cardNumberPlaceholder')} {...register('cardNumber')} />
                 <div className="flex gap-2">
@@ -157,7 +171,12 @@ export default function Signup() {
                 <TextInput withAsterisk label={t('cardholderName')} placeholder={t('cardholderNamePlaceholder')} {...register('cardholderName')} />
               </div>
             )}
-            <Radio value="bank" checked={values.paymentMethod === 'bank'} label={t('bankTransfer')} onChange={register('paymentMethod').onChange} />
+            <Radio
+              value="TRANSFER"
+              checked={values.paymentMethod === 'TRANSFER'}
+              label={t('bankTransfer')}
+              onChange={register('paymentMethod').onChange}
+            />
             <h3 className="h5">{t('termsAndConditions')}</h3>
             <button
               className={clsx(
