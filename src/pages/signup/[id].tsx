@@ -92,7 +92,15 @@ export default function Signup() {
       orgId: process.env.NEXT_PUBLIC_HOTUS_ORG_ID,
     };
 
-    if (paymentMethod === 'CARD') {
+    http
+      .post('/organizations/public/subscribe', data)
+      .then(() => {
+        toast.success(t('itemAdded'));
+        push('/success');
+      })
+      .catch((error) => toast.error(error.message));
+
+    /*if (paymentMethod === 'CARD') {
       window.Multipayment.init(process.env.NEXT_PUBLIC_GMO_SHOP_ID);
       window.Multipayment.getToken(
         {
@@ -123,7 +131,7 @@ export default function Signup() {
           push('/success');
         })
         .catch((error) => toast.error(error.message));
-    }
+    }*/
   });
 
   return (
