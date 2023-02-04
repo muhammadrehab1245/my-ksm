@@ -1,8 +1,9 @@
 import type { GetServerSideProps } from 'next';
 import type { Plan } from '@/types';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
+import iMask, { MaskedRange } from 'imask';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -23,6 +24,24 @@ export default function Signup() {
   const { data } = usePlans();
   const [plan, setPlan] = useState<Plan>();
   const [opened, { toggle }] = useDisclosure(false);
+  const cardNumber = useRef(null);
+  const cvv = useRef(null);
+  const expiryDate = useRef(null);
+
+  useEffect(() => {
+    // @ts-ignore
+    iMask(cardNumber.current, { mask: '0000 0000 0000 0000' });
+    // @ts-ignore
+    iMask(cvv.current, { mask: Number, min: 0, max: 999 });
+    // @ts-ignore
+    iMask(expiryDate.current, {
+      mask: 'm/y',
+      blocks: {
+        m: { mask: MaskedRange, autofix: 'pad', from: 1, to: 12 },
+        y: { mask: MaskedRange, autofix: 'pad', from: 1, to: 99 },
+      },
+    });
+  }, []);
 
   useEffect(() => {
     if (data && query.id) {
@@ -171,10 +190,16 @@ export default function Signup() {
             <Radio value="CARD" checked={values.paymentMethod === 'CARD'} label={t('creditCard')} onChange={register('paymentMethod').onChange} />
             {values.paymentMethod === 'CARD' && (
               <div className="ml-8 space-y-2">
-                <TextInput withAsterisk label={t('cardNumber')} placeholder={t('cardNumberPlaceholder')} {...register('cardNumber')} />
+                <TextInput ref={cardNumber} withAsterisk label={t('cardNumber')} placeholder={t('cardNumberPlaceholder')} {...register('cardNumber')} />
                 <div className="flex gap-2">
-                  <TextInput withAsterisk label={t('expiryDate')} placeholder={t('expiryDatePlaceholder')} {...register('expiryDate')} />
-                  <TextInput withAsterisk label={t('cvv')} placeholder={t('cvvPlaceholder')} {...register('cvv')} />
+                  <TextInput
+                    ref={expiryDate}
+                    withAsterisk
+                    label={t('expiryDate')}
+                    placeholder={t('expiryDatePlaceholder')}
+                    {...register('expiryDate')}
+                  />
+                  <TextInput ref={cvv} withAsterisk label={t('cvv')} placeholder={t('cvvPlaceholder')} {...register('cvv')} />
                 </div>
                 <TextInput withAsterisk label={t('cardholderName')} placeholder={t('cardholderNamePlaceholder')} {...register('cardholderName')} />
               </div>
