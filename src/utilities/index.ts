@@ -13,13 +13,3 @@ export function convertType(value: string) {
 }
 
 export const countries = getCodes().map((code) => ({ value: code, label: getName(code) ?? `aaa ${code}` }));
-
-export const parseDigits = (string: string) => (string.match(/\d+/g) || []).join('');
-
-export const formatDate = (string: string) => {
-  const digits = parseDigits(string);
-  const chars = digits.split('');
-  return chars.reduce((r, v, index) => (index === 2 ? `${r}/${v}` : `${r}${v}`), '').substring(0, 5);
-};
-
-export const formatCVV = (string: string) => parseDigits(string).substring(0, 3);
