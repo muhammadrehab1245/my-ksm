@@ -55,6 +55,7 @@
     "react-hot-toast": "^2.4.0",
     "react-i18next": "^12.1.4",
     "react-icons": "^4.7.1",
+    "rifm": "^0.12.1",
     "swr": "^2.0.0",
     "tiny-emitter": "^2.1.0",
     "validator": "^13.7.0",

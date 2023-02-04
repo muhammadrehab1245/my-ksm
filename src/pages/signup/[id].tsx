@@ -3,16 +3,17 @@ import type { Plan } from '@/types';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
+import { useRifm } from 'rifm';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { date, object, string } from 'yup';
 import { DatePicker } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm, yupResolver } from '@mantine/form';
 import { Alert, Button, Modal, Radio, Select, TextInput } from '@mantine/core';
-import { date, object, string } from 'yup';
 import { usePlans } from '@/hooks/fetch';
-import { countries, http } from '@/utilities';
+import { countries, formatCVV, formatDate, http } from '@/utilities';
 import { Skeleton } from '@/components';
 import { FiCalendar, FiCheckCircle, FiChevronRight } from 'react-icons/fi';
 import 'dayjs/locale/ja';
@@ -73,6 +74,7 @@ export default function Signup() {
     },
     validate: yupResolver(schema),
   });
+
   const onSubmit = handleSubmit((values) => {
     const { paymentMethod, cardNumber, expiryDate, cvv, cardholderName } = values;
     const { email, firstName, lastName, dob, gender, nationality, zipCode, phone, address } = values;
@@ -134,6 +136,9 @@ export default function Signup() {
     }*/
   });
 
+  const expiryDate = useRifm({ value: values.expiryDate, onChange: (value) => setFieldValue('expiryDate', value), format: formatDate });
+  const cvv = useRifm({ value: values.cvv, onChange: (value) => setFieldValue('cvv', value), format: formatCVV });
+
   return (
     <div className="container py-12">
       <form onSubmit={onSubmit}>
@@ -173,8 +178,14 @@ export default function Signup() {
               <div className="ml-8 space-y-2">
                 <TextInput withAsterisk label={t('cardNumber')} placeholder={t('cardNumberPlaceholder')} {...register('cardNumber')} />
                 <div className="flex gap-2">
-                  <TextInput withAsterisk label={t('expiryDate')} placeholder={t('expiryDatePlaceholder')} {...register('expiryDate')} />
-                  <TextInput withAsterisk label={t('cvv')} placeholder={t('cvvPlaceholder')} {...register('cvv')} />
+                  <TextInput
+                    withAsterisk
+                    label={t('expiryDate')}
+                    placeholder={t('expiryDatePlaceholder')}
+                    {...register('expiryDate')}
+                    {...expiryDate}
+                  />
+                  <TextInput withAsterisk label={t('cvv')} placeholder={t('cvvPlaceholder')} {...register('cvv')} {...cvv} />
                 </div>
                 <TextInput withAsterisk label={t('cardholderName')} placeholder={t('cardholderNamePlaceholder')} {...register('cardholderName')} />
               </div>
