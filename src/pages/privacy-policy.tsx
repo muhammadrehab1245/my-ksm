@@ -1,6 +1,6 @@
 export default function PrivacyPolicy() {
   return (
-    <div className="container prose min-w-full">
+    <div className="container prose min-w-full p-12">
       <h1>プライバシーポリシー</h1>
       <p>
         特定非営利活動法人グランドワークこしみず（以下、「NPO法人GWこしみず」といいます。）は、本アプリ上で提供するサービス（以下、「本サービス」といいます。）におけるプライバシー情報の取扱いについて、以下のとおりプライバシーポリシー（以下、「本ポリシー」といいます。）を定めます。

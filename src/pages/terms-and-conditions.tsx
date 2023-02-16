@@ -1,6 +1,6 @@
 export default function TermsAndConditions() {
   return (
-    <div className="container prose min-w-full">
+    <div className="container prose min-w-full p-12">
       <h1>利用規約</h1>
       <p>
         この利用規約（以下，「本規約」といいます。）は、特定非営利活動法人グランドワークこしみずがこのアプリ上で提供するサービス（以下、「本サービス」といいます。）の利用条件を定めるものです。利用者のみなさまには、本規約に従って，本サービスをご利用いただきます。
