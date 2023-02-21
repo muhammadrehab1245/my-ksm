@@ -35,10 +35,10 @@ export default function Signup() {
     iMask(cvv.current, { mask: Number, min: 0, max: 999 });
     // @ts-ignore
     iMask(expiryDate.current, {
-      mask: 'm/y',
+      mask: 'y/m',
       blocks: {
         m: { mask: MaskedRange, autofix: 'pad', from: 1, to: 12 },
-        y: { mask: MaskedRange, autofix: 'pad', from: 1, to: 99 },
+        y: { mask: MaskedRange, autofix: 'pad', from: 1, to: 9999 },
       },
     });
   }, []);
@@ -96,6 +96,7 @@ export default function Signup() {
     const { paymentMethod, cardNumber, expiryDate, cvv, cardholderName } = values;
     const { email, firstName, lastName, dob, gender, nationality, zipCode, phone, address } = values;
 
+    console.log(cardNumber, expiryDate, cvv);
     const data = {
       email,
       firstName,
@@ -111,34 +112,23 @@ export default function Signup() {
       orgId: process.env.NEXT_PUBLIC_HOTUS_ORG_ID,
     };
 
-    http
-      .post('/organizations/public/subscribe', data)
-      .then(() => {
-        toast.success(t('itemAdded'));
-        push('/success');
-      })
-      .catch((error) => toast.error(error.message));
-
-    /*if (paymentMethod === 'CARD') {
+    if (paymentMethod === 'CARD') {
       window.Multipayment.init(process.env.NEXT_PUBLIC_GMO_SHOP_ID);
       window.Multipayment.getToken(
         {
-          cardno: cardNumber,
-          expire: expiryDate,
+          cardno: cardNumber.replaceAll(' ', ''),
+          expire: expiryDate.replace('/', ''),
           securitycode: cvv,
           holdername: cardholderName,
         },
-        function ({ resultCode, tokenObject: { token } }: { resultCode: string; tokenObject: { token: string } }) {
+        function ({ resultCode, tokenObject }: { resultCode: string; tokenObject: { token: string } }) {
           if (resultCode != '000') {
             toast.error(t('cardError'));
           } else {
-            http
-              .post('/organizations/public/subscribe', { ...data, cardToken: token })
-              .then(() => {
-                toast.success(t('itemAdded'));
-                push('/success');
-              })
-              .catch((error) => toast.error(error.message));
+            http.post('/organizations/public/subscribe', { ...data, cardToken: tokenObject?.token }).then(() => {
+              toast.success(t('itemAdded'));
+              push('/success');
+            });
           }
         },
       );
@@ -150,7 +140,7 @@ export default function Signup() {
           push('/success');
         })
         .catch((error) => toast.error(error.message));
-    }*/
+    }
   });
 
   return (
