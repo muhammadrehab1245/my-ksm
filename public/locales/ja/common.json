@@ -19,9 +19,9 @@
   "email": "メールアドレス",
   "emailPlaceholder": "例：abcde@email.com",
   "emailRequired": "電子メールは有効な電子メールである必要があります",
-  "lastName": "姓",
+  "lastName": "名",
   "lastNamePlaceholder": "例：山田",
-  "firstName": "名",
+  "firstName": "姓",
   "firstNamePlaceholder": "例：太陽",
   "gender": "性別",
   "genderOptions": {
