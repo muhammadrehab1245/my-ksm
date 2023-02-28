@@ -12,8 +12,8 @@ import { useDisclosure } from '@mantine/hooks';
 import { useForm, yupResolver } from '@mantine/form';
 import { Alert, Button, Modal, Radio, Select, TextInput } from '@mantine/core';
 import { date, object, string } from 'yup';
-import { usePlans } from '@/hooks/fetch';
-import { countries, http } from '@/utilities';
+import { useCountries, usePlans } from '@/hooks/fetch';
+import { http } from '@/utilities';
 import { Skeleton } from '@/components';
 import { FiCalendar, FiCheckCircle, FiChevronRight } from 'react-icons/fi';
 import 'dayjs/locale/ja';
@@ -22,6 +22,7 @@ export default function Signup() {
   const { t } = useTranslation();
   const { query, push } = useRouter();
   const { data } = usePlans();
+  const { countries } = useCountries();
   const [plan, setPlan] = useState<Plan>();
   const [opened, { toggle }] = useDisclosure(false);
   const cardNumber = useRef(null);
@@ -169,14 +170,16 @@ export default function Signup() {
               {...register('dob')}
             />
             <TextInput withAsterisk label={t('phone')} placeholder={t('phone')} {...register('phone')} />
-            <Select
-              searchable
-              withAsterisk
-              label={t('nationality')}
-              placeholder={t('selectPlaceholder')}
-              data={countries}
-              {...register('nationality')}
-            />
+            {countries && (
+              <Select
+                searchable
+                withAsterisk
+                label={t('nationality')}
+                placeholder={t('selectPlaceholder')}
+                data={countries}
+                {...register('nationality')}
+              />
+            )}
             {values.nationality === 'JP' && (
               <div className="flex gap-4">
                 <TextInput withAsterisk label={t('zipCode')} placeholder={t('zipCodePlaceholder')} {...register('zipCode')} />

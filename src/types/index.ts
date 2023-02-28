@@ -26,6 +26,12 @@ export interface General {
   empty: boolean;
 }
 
+export interface Country {
+  code: string;
+  nameEn: string;
+  nameJa: string;
+}
+
 export interface Plan {
   id: string;
   orgId: string;

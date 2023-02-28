@@ -1,4 +1,4 @@
-import type { Plans } from '@/types';
+import type { Country, Plans } from '@/types';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import queryString from 'query-string';
@@ -20,6 +20,18 @@ function useKey(path: string, params?: any) {
   }
 
   return finalQuery ? `${path}?${queryString.stringify(finalQuery)}` : `${path}`;
+}
+
+export function useCountries() {
+  const key = useKey('/address/public/countries');
+
+  const { data, error } = useSWR<Country[]>(key, fetcher, { onErrorRetry });
+
+  return {
+    countries: data?.map(({ code, nameJa }) => ({ value: code, label: nameJa })),
+    isLoading: !error && !data,
+    isError: error,
+  };
 }
 
 export function usePlans(params = { sortBy: 'code', sortDir: 'asc' }) {
