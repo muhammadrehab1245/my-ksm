@@ -51,7 +51,7 @@ export default function Signup() {
   }, [data, query.id]);
 
   const schema = object({
-    email: string().email(t('emailRequired')).required(t('required')),
+    email: string().email(t('emailRequired')),
     firstName: string().required(t('required')),
     lastName: string().required(t('required')),
     gender: string().required(t('required')),
@@ -96,7 +96,6 @@ export default function Signup() {
     const { paymentMethod, cardNumber, expiryDate, cvv, cardholderName } = values;
     const { email, firstName, lastName, dob, gender, nationality, zipCode, phone, address } = values;
 
-    console.log(cardNumber, expiryDate, cvv);
     const data = {
       email,
       firstName,
@@ -150,7 +149,7 @@ export default function Signup() {
           <div className="space-y-4">
             <div className="text-right text-red-500">* {t('required')}</div>
             <h3 className="h5">{t('basicInfo')}</h3>
-            <TextInput withAsterisk label={t('email')} placeholder={t('emailPlaceholder')} {...register('email')} />
+            <TextInput label={t('email')} placeholder={t('emailPlaceholder')} {...register('email')} />
             <div className="grid grid-cols-2 gap-4">
               <TextInput withAsterisk label={t('firstName')} placeholder={t('firstNamePlaceholder')} {...register('firstName')} />
               <TextInput withAsterisk label={t('lastName')} placeholder={t('lastNamePlaceholder')} {...register('lastName')} />
@@ -160,7 +159,15 @@ export default function Signup() {
               <Radio value="FEMALE" label={t('genderOptions.female')} />
               <Radio value="UNDISCLOSED" label={t('genderOptions.preferNotToSay')} />
             </Radio.Group>
-            <DatePicker withAsterisk label={t('dob')} placeholder={t('datePlaceholder')} locale="ja" icon={<FiCalendar />} {...register('dob')} />
+            <DatePicker
+              withAsterisk
+              inputFormat="YYYY/MM/DD"
+              label={t('dob')}
+              placeholder={t('datePlaceholder')}
+              locale="ja"
+              icon={<FiCalendar />}
+              {...register('dob')}
+            />
             <TextInput withAsterisk label={t('phone')} placeholder={t('phone')} {...register('phone')} />
             <Select
               searchable
@@ -264,9 +271,6 @@ export default function Signup() {
                   <div>{t('total')}:</div>
                   <div>{plan.initialAdmissionFee + plan.initialAdminFee + plan.monthlyFee}円</div>
                 </div>
-                <Button fullWidth type="submit" disabled={values.acceptTos === false}>
-                  {t('register')}
-                </Button>
               </div>
             ) : (
               <Skeleton />
