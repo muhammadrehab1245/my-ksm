@@ -32,6 +32,18 @@ export interface Country {
   nameJa: string;
 }
 
+export interface MemberFeeDetail {
+  initialAdminFee: number;
+  initialAdmissionFee: number;
+  monthlyFee: number;
+  monthlyFeeStartingPeriod: number;
+  monthlyFeeCurrent: number;
+  monthlyFeeRemaining: number;
+  daysLeftInCurrentMonth: number;
+  totalDaysOfMonth: number;
+  totalAmount: number;
+}
+
 export interface Plan {
   id: string;
   orgId: string;

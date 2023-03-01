@@ -1,6 +1,5 @@
 import type { GetServerSideProps } from 'next';
-import type { Plan } from '@/types';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import iMask, { MaskedRange } from 'imask';
@@ -12,7 +11,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { useForm, yupResolver } from '@mantine/form';
 import { Alert, Button, Modal, Radio, Select, TextInput } from '@mantine/core';
 import { date, object, string } from 'yup';
-import { useCountries, usePlans } from '@/hooks/fetch';
+import { useCountries, useMemberCalculateFeeDetail } from '@/hooks/fetch';
 import { http } from '@/utilities';
 import { Skeleton } from '@/components';
 import { FiCalendar, FiCheckCircle, FiChevronRight } from 'react-icons/fi';
@@ -21,9 +20,8 @@ import 'dayjs/locale/ja';
 export default function Signup() {
   const { t } = useTranslation();
   const { query, push } = useRouter();
-  const { data } = usePlans();
+  const { data } = useMemberCalculateFeeDetail(query.id as string);
   const { countries } = useCountries();
-  const [plan, setPlan] = useState<Plan>();
   const [opened, { toggle }] = useDisclosure(false);
   const cardNumber = useRef(null);
   const cvv = useRef(null);
@@ -43,13 +41,6 @@ export default function Signup() {
       },
     });
   }, []);
-
-  useEffect(() => {
-    if (data && query.id) {
-      const plan = data.find(({ id }) => id == query.id);
-      setPlan(plan);
-    }
-  }, [data, query.id]);
 
   const schema = object({
     email: string().email(t('emailRequired')),
@@ -247,7 +238,7 @@ export default function Signup() {
             </Button>
           </div>
           <div>
-            {plan ? (
+            {data ? (
               <div className="rounded-xl bg-white p-4 shadow">
                 <h4 className="font-semibold">{t('orderSummary')}</h4>
                 {/*<div className="flex justify-between">
@@ -256,15 +247,15 @@ export default function Signup() {
                 </div>*/}
                 <div className="flex justify-between">
                   <div>{t('initialSetupFee')}:</div>
-                  <div>{plan.initialAdmissionFee}円</div>
+                  <div>{data.initialAdmissionFee}円</div>
                 </div>
                 <div className="flex justify-between">
                   <div>{t('handlingFee')}:</div>
-                  <div>{plan.initialAdminFee}円</div>
+                  <div>{data.initialAdminFee}円</div>
                 </div>
                 <div className="flex justify-between">
                   <div>{t('monthlyFee')}:</div>
-                  <div>{plan.monthlyFee}円</div>
+                  <div>{data.monthlyFeeCurrent}円</div>
                 </div>
                 <div className="flex justify-between">
                   <div>{t('VAT')}:</div>
@@ -272,7 +263,7 @@ export default function Signup() {
                 </div>
                 <div className="mt-4 mb-4 flex justify-between border-t border-gray-300 pt-4 text-xl font-semibold">
                   <div>{t('total')}:</div>
-                  <div>{plan.initialAdmissionFee + plan.initialAdminFee + plan.monthlyFee}円</div>
+                  <div>{data.totalAmount}円</div>
                 </div>
               </div>
             ) : (

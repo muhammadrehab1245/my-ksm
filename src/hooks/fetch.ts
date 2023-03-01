@@ -1,4 +1,4 @@
-import type { Country, Plans } from '@/types';
+import type { Country, MemberFeeDetail, Plans } from '@/types';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import queryString from 'query-string';
@@ -29,6 +29,19 @@ export function useCountries() {
 
   return {
     countries: data?.map(({ code, nameJa }) => ({ value: code, label: nameJa })),
+    isLoading: !error && !data,
+    isError: error,
+  };
+}
+
+export function useMemberCalculateFeeDetail(planId: string, subscriptionMonth?: Date, params?: object) {
+  const key = useKey(`/members/calculate-fee-details`, { planId, ...params });
+
+  const { data, error } = useSWR<MemberFeeDetail>(key, fetcher, { onErrorRetry });
+
+  return {
+    key,
+    data,
     isLoading: !error && !data,
     isError: error,
   };
