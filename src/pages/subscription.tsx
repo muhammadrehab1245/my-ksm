@@ -11,7 +11,7 @@ export default function Subscription() {
   const { data } = usePlans();
 
   return (
-    <div className="flex h-screen flex-col bg-gray-100">
+    <div className="mb-8 flex flex-col bg-gray-100">
       <div className="flex-1">
         <div className="relative">
           <img className="h-72 w-full object-cover" src={'/images/banner.jpg'} alt="banner" />
