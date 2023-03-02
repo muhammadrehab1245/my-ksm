@@ -104,7 +104,9 @@ export default function Signup() {
     };
 
     if (paymentMethod === 'CARD') {
+      // @ts-ignore
       window.Multipayment.init(process.env.NEXT_PUBLIC_GMO_SHOP_ID);
+      // @ts-ignore
       window.Multipayment.getToken(
         {
           cardno: cardNumber.replaceAll(' ', ''),
@@ -255,7 +257,7 @@ export default function Signup() {
                 </div>
                 <div className="flex justify-between">
                   <div>{t('monthlyFee')}:</div>
-                  <div>{data.monthlyFeeCurrent}円</div>
+                  <div>{data.monthlyFeeRemaining}円</div>
                 </div>
                 <div className="flex justify-between">
                   <div>{t('VAT')}:</div>
