@@ -34,8 +34,8 @@ export function useCountries() {
   };
 }
 
-export function useMemberCalculateFeeDetail(planId: string, subscriptionMonth?: Date, params?: object) {
-  const key = useKey(`/members/calculate-fee-details`, { planId, ...params });
+export function useMemberCalculateFeeDetail(planId: string, email: string, params?: object) {
+  const key = useKey(`/members/calculate-fee-details`, { planId, email, ...params });
 
   const { data, error } = useSWR<MemberFeeDetail>(key, fetcher, { onErrorRetry });
 

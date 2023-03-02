@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { DatePicker } from '@mantine/dates';
-import { useDisclosure } from '@mantine/hooks';
+import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import { useForm, yupResolver } from '@mantine/form';
 import { Alert, Button, Modal, Radio, Select, TextInput } from '@mantine/core';
 import { date, object, string } from 'yup';
@@ -20,7 +20,6 @@ import 'dayjs/locale/ja';
 export default function Signup() {
   const { t } = useTranslation();
   const { query, push } = useRouter();
-  const { data } = useMemberCalculateFeeDetail(query.id as string);
   const { countries } = useCountries();
   const [opened, { toggle }] = useDisclosure(false);
   const cardNumber = useRef(null);
@@ -135,6 +134,9 @@ export default function Signup() {
         .catch((error) => toast.error(error.message));
     }
   });
+
+  const [debounced] = useDebouncedValue(values.email, 800);
+  const { data } = useMemberCalculateFeeDetail(query.id as string, debounced);
 
   return (
     <div className="container py-12">
