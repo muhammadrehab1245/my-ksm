@@ -11,7 +11,7 @@ import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import { useForm, yupResolver } from '@mantine/form';
 import { Alert, Button, Modal, Radio, Select, TextInput } from '@mantine/core';
 import { date, object, string } from 'yup';
-import { useCountries, useMemberCalculateFeeDetail } from '@/hooks/fetch';
+import { useCountries, useDetectRule, useMemberCalculateFeeDetail } from '@/hooks/fetch';
 import { http } from '@/utilities';
 import { Skeleton } from '@/components';
 import { FiCalendar, FiCheckCircle, FiChevronRight } from 'react-icons/fi';
@@ -137,6 +137,7 @@ export default function Signup() {
 
   const [debounced] = useDebouncedValue(values.email, 800);
   const { data } = useMemberCalculateFeeDetail(query.id as string, debounced);
+  const { data: rule } = useDetectRule(query.id as string, data?.totalAmount);
 
   return (
     <div className="container py-12">
@@ -261,13 +262,26 @@ export default function Signup() {
                   <div>{t('monthlyFee')}:</div>
                   <div>{data.monthlyFeeRemaining}円</div>
                 </div>
+                {rule && (
+                  <div className="flex justify-between">
+                    <div>
+                      {t('discount')}
+                      {rule?.discountType === 'PERCENTAGE' && `(${rule?.discountValue}%)`}:
+                    </div>
+                    <div>-{rule?.discountType === 'PERCENTAGE' ? (rule?.discountValue / 100) * data.totalAmount : rule.discountValue}円</div>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <div>{t('VAT')}:</div>
                   <div>-</div>
                 </div>
                 <div className="mt-4 mb-4 flex justify-between border-t border-gray-300 pt-4 text-xl font-semibold">
                   <div>{t('total')}:</div>
-                  <div>{data.totalAmount}円</div>
+                  <div>
+                    {data.totalAmount -
+                      (rule?.discountType === 'PERCENTAGE' ? (rule?.discountValue || 0 / 100) * data.totalAmount : rule?.discountValue || 0)}
+                    円
+                  </div>
                 </div>
               </div>
             ) : (

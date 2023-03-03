@@ -1,4 +1,4 @@
-import type { Country, MemberFeeDetail, Plans } from '@/types';
+import type { Country, MemberFeeDetail, Plans, PricingRule } from '@/types';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import queryString from 'query-string';
@@ -38,6 +38,19 @@ export function useMemberCalculateFeeDetail(planId: string, email: string, param
   const key = useKey(`/members/calculate-fee-details`, { planId, email, ...params });
 
   const { data, error } = useSWR<MemberFeeDetail>(key, fetcher, { onErrorRetry });
+
+  return {
+    key,
+    data,
+    isLoading: !error && !data,
+    isError: error,
+  };
+}
+
+export function useDetectRule(planId: string, amount?: number, params?: object) {
+  const key = useKey(`/pricing-rules/detect-rule`, { planId, amount, ...params });
+
+  const { data, error } = useSWR<PricingRule>(key, amount ? fetcher : null, { onErrorRetry });
 
   return {
     key,

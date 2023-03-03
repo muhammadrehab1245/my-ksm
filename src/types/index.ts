@@ -32,6 +32,24 @@ export interface Country {
   nameJa: string;
 }
 
+export interface PricingRule {
+  id: string;
+  orgId: string;
+  title: string;
+  startDate: Date;
+  endDate: Date;
+  ruleType: 'AUTO';
+  discountType: string;
+  discountValue: number;
+  oncePerCustomer: boolean;
+  usageLimit: number;
+  usedCount: number;
+  minimumAmount: number;
+  minimumQuantity: number;
+  planId: string;
+  deleted: boolean;
+}
+
 export interface MemberFeeDetail {
   initialAdminFee: number;
   initialAdmissionFee: number;
