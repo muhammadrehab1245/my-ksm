@@ -1,5 +1,6 @@
 import type { GetServerSideProps } from 'next';
-import { useEffect, useRef } from 'react';
+import type { Coupon } from '@/types';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import iMask, { MaskedRange } from 'imask';
@@ -11,7 +12,7 @@ import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import { useForm, yupResolver } from '@mantine/form';
 import { Alert, Button, Modal, Radio, Select, TextInput } from '@mantine/core';
 import { date, object, string } from 'yup';
-import { useCountries, useDetectRule, useMemberCalculateFeeDetail } from '@/hooks/fetch';
+import { useCountries, useCoupon, useDetectRule, useMemberCalculateFeeDetail } from '@/hooks/fetch';
 import { http } from '@/utilities';
 import { Skeleton } from '@/components';
 import { FiCalendar, FiCheckCircle, FiChevronRight } from 'react-icons/fi';
@@ -25,6 +26,9 @@ export default function Signup() {
   const cardNumber = useRef(null);
   const cvv = useRef(null);
   const expiryDate = useRef(null);
+  const [tempCouponCode, setTempCouponCode] = useState('');
+  const [couponCode, setCouponCode] = useState('');
+  const [couponData, setCouponData] = useState<Coupon>();
 
   useEffect(() => {
     // @ts-ignore
@@ -137,7 +141,18 @@ export default function Signup() {
 
   const [debounced] = useDebouncedValue(values.email, 800);
   const { data } = useMemberCalculateFeeDetail(query.id as string, debounced);
-  const { data: rule } = useDetectRule(query.id as string, data?.totalAmount);
+  const { data: rule, isLoading } = useDetectRule({ planId: query.id as string, amount: data?.totalAmount });
+  const { data: coupon } = useCoupon({ planId: query.id as string, amount: data?.totalAmount, couponCode, quantity: 1 });
+
+  useEffect(() => {
+    if (rule) {
+      setCouponData(rule);
+    } else if (coupon?.ruleType) {
+      setCouponData(coupon);
+    } else {
+      setCouponData(null);
+    }
+  }, [rule, coupon]);
 
   return (
     <div className="container py-12">
@@ -262,24 +277,46 @@ export default function Signup() {
                   <div>{t('monthlyFee')}:</div>
                   <div>{data.monthlyFeeRemaining}円</div>
                 </div>
-                {rule && (
+                {couponData && (
                   <div className="flex justify-between">
                     <div>
                       {t('discount')}
-                      {rule?.discountType === 'PERCENTAGE' && `(${rule?.discountValue}%)`}:
+                      {couponData?.discountType === 'PERCENTAGE' && `(${couponData?.discountValue}%)`}:
                     </div>
-                    <div>-{rule?.discountType === 'PERCENTAGE' ? (rule?.discountValue / 100) * data.totalAmount : rule.discountValue}円</div>
+                    <div>
+                      -
+                      {couponData?.discountType === 'PERCENTAGE'
+                        ? Math.round((couponData?.discountValue / 100) * data.totalAmount)
+                        : couponData.discountValue}
+                      円
+                    </div>
                   </div>
                 )}
                 <div className="flex justify-between">
                   <div>{t('VAT')}:</div>
                   <div>-</div>
                 </div>
+                {!rule && (
+                  <>
+                    <div className="mt-2 flex space-x-2">
+                      <TextInput
+                        className="flex-1"
+                        placeholder={t('couponPlaceholder')}
+                        onChange={({ currentTarget }) => setTempCouponCode(currentTarget.value)}
+                      />
+                      <Button type="button" size="sm" onClick={() => setCouponCode(tempCouponCode)}>
+                        {t('submitCoupon')}
+                      </Button>
+                    </div>
+                  </>
+                )}
                 <div className="mt-4 mb-4 flex justify-between border-t border-gray-300 pt-4 text-xl font-semibold">
                   <div>{t('total')}:</div>
                   <div>
                     {data.totalAmount -
-                      (rule?.discountType === 'PERCENTAGE' ? (rule?.discountValue || 0 / 100) * data.totalAmount : rule?.discountValue || 0)}
+                      (couponData?.discountType === 'PERCENTAGE'
+                        ? Math.round((couponData?.discountValue / 100) * data.totalAmount)
+                        : couponData?.discountValue || 0)}
                     円
                   </div>
                 </div>

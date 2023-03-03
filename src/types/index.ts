@@ -32,13 +32,13 @@ export interface Country {
   nameJa: string;
 }
 
-export interface PricingRule {
+export interface Coupon {
   id: string;
   orgId: string;
   title: string;
   startDate: Date;
   endDate: Date;
-  ruleType: 'AUTO';
+  ruleType: string;
   discountType: string;
   discountValue: number;
   oncePerCustomer: boolean;
