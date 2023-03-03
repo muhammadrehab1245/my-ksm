@@ -17,7 +17,6 @@ import { http } from '@/utilities';
 import { Skeleton } from '@/components';
 import { FiCalendar, FiCheckCircle, FiChevronRight } from 'react-icons/fi';
 import 'dayjs/locale/ja';
-import { iError } from '@/types';
 
 export default function Signup() {
   const { t } = useTranslation();
