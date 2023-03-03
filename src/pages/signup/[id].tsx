@@ -17,6 +17,7 @@ import { http } from '@/utilities';
 import { Skeleton } from '@/components';
 import { FiCalendar, FiCheckCircle, FiChevronRight } from 'react-icons/fi';
 import 'dayjs/locale/ja';
+import { iError } from '@/types';
 
 export default function Signup() {
   const { t } = useTranslation();
@@ -149,6 +150,9 @@ export default function Signup() {
       setCouponData(rule);
     } else if (coupon?.ruleType) {
       setCouponData(coupon);
+      toast.success(t('couponApplied'));
+    } else if (coupon?.error) {
+      toast.error(coupon?.stack);
     } else {
       setCouponData(null);
     }

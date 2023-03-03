@@ -1,3 +1,8 @@
+export interface iError {
+  error: string;
+  stack: string;
+}
+
 export interface General {
   pageable: {
     sort: {
