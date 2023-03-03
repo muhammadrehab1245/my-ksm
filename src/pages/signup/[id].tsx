@@ -39,8 +39,8 @@ export default function Signup() {
     iMask(expiryDate.current, {
       mask: 'y/m',
       blocks: {
-        m: { mask: MaskedRange, autofix: 'pad', from: 1, to: 12 },
-        y: { mask: MaskedRange, autofix: 'pad', from: 1, to: 9999 },
+        m: { mask: MaskedRange, from: 1, to: 12 },
+        y: { mask: MaskedRange, from: 2010, to: 3000 },
       },
     });
   }, []);
