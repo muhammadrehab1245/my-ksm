@@ -37,10 +37,10 @@ export default function Signup() {
     iMask(cvv.current, { mask: Number, min: 0, max: 999 });
     // @ts-ignore
     iMask(expiryDate.current, {
-      mask: 'y/m',
+      mask: 'm/y',
       blocks: {
         m: { mask: MaskedRange, from: 1, to: 12 },
-        y: { mask: MaskedRange, from: 2010, to: 3000 },
+        y: { mask: MaskedRange, from: 10, to: 99 },
       },
     });
   }, []);
@@ -57,7 +57,10 @@ export default function Signup() {
     zipCode: string().when('nationality', { is: (nat: string) => nat === 'JP', then: (schema) => schema.required(t('required')) }),
     address: string().when('nationality', { is: (nat: string) => nat === 'JP', then: (schema) => schema.required(t('required')) }),
     cardNumber: string().when('paymentMethod', { is: (pm: string) => pm === 'CARD', then: (schema) => schema.required(t('required')) }),
-    expiryDate: string().when('paymentMethod', { is: (pm: string) => pm === 'CARD', then: (schema) => schema.required(t('required')) }),
+    expiryDate: string().when('paymentMethod', {
+      is: (pm: string) => pm === 'CARD',
+      then: (schema) => schema.required(t('required')).min(5, t('required')),
+    }),
     cvv: string().when('paymentMethod', { is: (pm: string) => pm === 'CARD', then: (schema) => schema.required(t('required')) }),
     cardholderName: string().when('paymentMethod', { is: (pm: string) => pm === 'CARD', then: (schema) => schema.required(t('required')) }),
   });
@@ -107,13 +110,15 @@ export default function Signup() {
     };
 
     if (paymentMethod === 'CARD') {
+      let expire = expiryDate.split('/');
+
       // @ts-ignore
       window.Multipayment.init(process.env.NEXT_PUBLIC_GMO_SHOP_ID);
       // @ts-ignore
       window.Multipayment.getToken(
         {
           cardno: cardNumber.replaceAll(' ', ''),
-          expire: expiryDate.replace('/', ''),
+          expire: `20${expire[1]}${expire[0]}`,
           securitycode: cvv,
           holdername: cardholderName,
         },

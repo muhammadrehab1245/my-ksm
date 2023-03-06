@@ -47,7 +47,7 @@
   "cardNumber": "カード番号",
   "cardNumberPlaceholder": "XXXX XXXX XXXX XXXX",
   "expiryDate": "有効期限",
-  "expiryDatePlaceholder": "YYYY/MM",
+  "expiryDatePlaceholder": "MM/YY",
   "cvv": "CVV",
   "cvvPlaceholder": "CVV",
   "cardholderName": "カード名義（ローマ字）",
