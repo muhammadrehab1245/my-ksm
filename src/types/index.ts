@@ -1,3 +1,8 @@
+export interface iError {
+  error: string;
+  stack: string;
+}
+
 export interface General {
   pageable: {
     sort: {
@@ -24,6 +29,42 @@ export interface General {
   first: boolean;
   numberOfElements: number;
   empty: boolean;
+}
+
+export interface Country {
+  code: string;
+  nameEn: string;
+  nameJa: string;
+}
+
+export interface Coupon {
+  id: string;
+  orgId: string;
+  title: string;
+  startDate: Date;
+  endDate: Date;
+  ruleType: string;
+  discountType: string;
+  discountValue: number;
+  oncePerCustomer: boolean;
+  usageLimit: number;
+  usedCount: number;
+  minimumAmount: number;
+  minimumQuantity: number;
+  planId: string;
+  deleted: boolean;
+}
+
+export interface MemberFeeDetail {
+  initialAdminFee: number;
+  initialAdmissionFee: number;
+  monthlyFee: number;
+  monthlyFeeStartingPeriod: number;
+  monthlyFeeCurrent: number;
+  monthlyFeeRemaining: number;
+  daysLeftInCurrentMonth: number;
+  totalDaysOfMonth: number;
+  totalAmount: number;
 }
 
 export interface Plan {

@@ -22,7 +22,7 @@ export function App({ Component, pageProps }: AppProps) {
 
       <MantineProvider withGlobalStyles withNormalizeCSS theme={mantineTheme}>
         <RouterTransition />
-        {['/'].includes(pathname) ? (
+        {['/', '/terms-and-conditions', '/privacy-policy', '/hotus/terms-and-conditions', '/hotus/privacy-policy'].includes(pathname) ? (
           <>
             <Toaster position="top-right" />
             <Component {...pageProps} />

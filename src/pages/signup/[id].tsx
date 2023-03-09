@@ -1,18 +1,19 @@
 import type { GetServerSideProps } from 'next';
-import type { Plan } from '@/types';
-import { useEffect, useState } from 'react';
+import type { Coupon } from '@/types';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
+import iMask, { MaskedRange } from 'imask';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { DatePicker } from '@mantine/dates';
-import { useDisclosure } from '@mantine/hooks';
+import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import { useForm, yupResolver } from '@mantine/form';
 import { Alert, Button, Modal, Radio, Select, TextInput } from '@mantine/core';
 import { date, object, string } from 'yup';
-import { usePlans } from '@/hooks/fetch';
-import { countries, http } from '@/utilities';
+import { useCountries, useCoupon, useDetectRule, useMemberCalculateFeeDetail } from '@/hooks/fetch';
+import { http } from '@/utilities';
 import { Skeleton } from '@/components';
 import { FiCalendar, FiCheckCircle, FiChevronRight } from 'react-icons/fi';
 import 'dayjs/locale/ja';
@@ -20,19 +21,32 @@ import 'dayjs/locale/ja';
 export default function Signup() {
   const { t } = useTranslation();
   const { query, push } = useRouter();
-  const { data } = usePlans();
-  const [plan, setPlan] = useState<Plan>();
+  const { countries } = useCountries();
   const [opened, { toggle }] = useDisclosure(false);
+  const cardNumber = useRef(null);
+  const cvv = useRef(null);
+  const expiryDate = useRef(null);
+  const [tempCouponCode, setTempCouponCode] = useState('');
+  const [couponCode, setCouponCode] = useState('');
+  const [couponData, setCouponData] = useState<Coupon>();
 
   useEffect(() => {
-    if (data && query.id) {
-      const plan = data.find(({ id }) => id == query.id);
-      setPlan(plan);
-    }
-  }, [data, query.id]);
+    // @ts-ignore
+    iMask(cardNumber.current, { mask: '0000 0000 0000 0000' });
+    // @ts-ignore
+    iMask(cvv.current, { mask: Number, min: 0, max: 999 });
+    // @ts-ignore
+    iMask(expiryDate.current, {
+      mask: 'm/y',
+      blocks: {
+        m: { mask: MaskedRange, from: 1, to: 12 },
+        y: { mask: MaskedRange, from: 10, to: 99 },
+      },
+    });
+  }, []);
 
   const schema = object({
-    email: string().email(t('emailRequired')).required(t('required')),
+    email: string().email(t('emailRequired')),
     firstName: string().required(t('required')),
     lastName: string().required(t('required')),
     gender: string().required(t('required')),
@@ -43,7 +57,10 @@ export default function Signup() {
     zipCode: string().when('nationality', { is: (nat: string) => nat === 'JP', then: (schema) => schema.required(t('required')) }),
     address: string().when('nationality', { is: (nat: string) => nat === 'JP', then: (schema) => schema.required(t('required')) }),
     cardNumber: string().when('paymentMethod', { is: (pm: string) => pm === 'CARD', then: (schema) => schema.required(t('required')) }),
-    expiryDate: string().when('paymentMethod', { is: (pm: string) => pm === 'CARD', then: (schema) => schema.required(t('required')) }),
+    expiryDate: string().when('paymentMethod', {
+      is: (pm: string) => pm === 'CARD',
+      then: (schema) => schema.required(t('required')).min(5, t('required')),
+    }),
     cvv: string().when('paymentMethod', { is: (pm: string) => pm === 'CARD', then: (schema) => schema.required(t('required')) }),
     cardholderName: string().when('paymentMethod', { is: (pm: string) => pm === 'CARD', then: (schema) => schema.required(t('required')) }),
   });
@@ -92,34 +109,27 @@ export default function Signup() {
       orgId: process.env.NEXT_PUBLIC_HOTUS_ORG_ID,
     };
 
-    http
-      .post('/organizations/public/subscribe', data)
-      .then(() => {
-        toast.success(t('itemAdded'));
-        push('/success');
-      })
-      .catch((error) => toast.error(error.message));
+    if (paymentMethod === 'CARD') {
+      let expire = expiryDate.split('/');
 
-    /*if (paymentMethod === 'CARD') {
+      // @ts-ignore
       window.Multipayment.init(process.env.NEXT_PUBLIC_GMO_SHOP_ID);
+      // @ts-ignore
       window.Multipayment.getToken(
         {
-          cardno: cardNumber,
-          expire: expiryDate,
+          cardno: cardNumber.replaceAll(' ', ''),
+          expire: `20${expire[1]}${expire[0]}`,
           securitycode: cvv,
           holdername: cardholderName,
         },
-        function ({ resultCode, tokenObject: { token } }: { resultCode: string; tokenObject: { token: string } }) {
+        function ({ resultCode, tokenObject }: { resultCode: string; tokenObject: { token: string } }) {
           if (resultCode != '000') {
             toast.error(t('cardError'));
           } else {
-            http
-              .post('/organizations/public/subscribe', { ...data, cardToken: token })
-              .then(() => {
-                toast.success(t('itemAdded'));
-                push('/success');
-              })
-              .catch((error) => toast.error(error.message));
+            http.post('/organizations/public/subscribe', { ...data, cardToken: tokenObject?.token }).then(() => {
+              toast.success(t('itemAdded'));
+              push('/success');
+            });
           }
         },
       );
@@ -131,8 +141,26 @@ export default function Signup() {
           push('/success');
         })
         .catch((error) => toast.error(error.message));
-    }*/
+    }
   });
+
+  const [debounced] = useDebouncedValue(values.email, 800);
+  const { data } = useMemberCalculateFeeDetail(query.id as string, debounced);
+  const { data: rule, isLoading } = useDetectRule({ planId: query.id as string, amount: data?.totalAmount });
+  const { data: coupon } = useCoupon({ planId: query.id as string, amount: data?.totalAmount, couponCode, quantity: 1 });
+
+  useEffect(() => {
+    if (rule) {
+      setCouponData(rule);
+    } else if (coupon?.ruleType) {
+      setCouponData(coupon);
+      toast.success(t('couponApplied'));
+    } else if (coupon?.error) {
+      toast.error(coupon?.stack);
+    } else {
+      setCouponData(null);
+    }
+  }, [rule, coupon]);
 
   return (
     <div className="container py-12">
@@ -141,7 +169,7 @@ export default function Signup() {
           <div className="space-y-4">
             <div className="text-right text-red-500">* {t('required')}</div>
             <h3 className="h5">{t('basicInfo')}</h3>
-            <TextInput withAsterisk label={t('email')} placeholder={t('emailPlaceholder')} {...register('email')} />
+            <TextInput label={t('email')} placeholder={t('emailPlaceholder')} {...register('email')} />
             <div className="grid grid-cols-2 gap-4">
               <TextInput withAsterisk label={t('firstName')} placeholder={t('firstNamePlaceholder')} {...register('firstName')} />
               <TextInput withAsterisk label={t('lastName')} placeholder={t('lastNamePlaceholder')} {...register('lastName')} />
@@ -151,16 +179,26 @@ export default function Signup() {
               <Radio value="FEMALE" label={t('genderOptions.female')} />
               <Radio value="UNDISCLOSED" label={t('genderOptions.preferNotToSay')} />
             </Radio.Group>
-            <DatePicker withAsterisk label={t('dob')} placeholder={t('datePlaceholder')} locale="ja" icon={<FiCalendar />} {...register('dob')} />
-            <TextInput withAsterisk label={t('phone')} placeholder={t('phone')} {...register('phone')} />
-            <Select
-              searchable
+            <DatePicker
               withAsterisk
-              label={t('nationality')}
-              placeholder={t('selectPlaceholder')}
-              data={countries}
-              {...register('nationality')}
+              inputFormat="YYYY/MM/DD"
+              label={t('dob')}
+              placeholder={t('datePlaceholder')}
+              locale="ja"
+              icon={<FiCalendar />}
+              {...register('dob')}
             />
+            <TextInput withAsterisk label={t('phone')} placeholder={t('phone')} {...register('phone')} />
+            {countries && (
+              <Select
+                searchable
+                withAsterisk
+                label={t('nationality')}
+                placeholder={t('selectPlaceholder')}
+                data={countries}
+                {...register('nationality')}
+              />
+            )}
             {values.nationality === 'JP' && (
               <div className="flex gap-4">
                 <TextInput withAsterisk label={t('zipCode')} placeholder={t('zipCodePlaceholder')} {...register('zipCode')} />
@@ -171,10 +209,16 @@ export default function Signup() {
             <Radio value="CARD" checked={values.paymentMethod === 'CARD'} label={t('creditCard')} onChange={register('paymentMethod').onChange} />
             {values.paymentMethod === 'CARD' && (
               <div className="ml-8 space-y-2">
-                <TextInput withAsterisk label={t('cardNumber')} placeholder={t('cardNumberPlaceholder')} {...register('cardNumber')} />
+                <TextInput ref={cardNumber} withAsterisk label={t('cardNumber')} placeholder={t('cardNumberPlaceholder')} {...register('cardNumber')} />
                 <div className="flex gap-2">
-                  <TextInput withAsterisk label={t('expiryDate')} placeholder={t('expiryDatePlaceholder')} {...register('expiryDate')} />
-                  <TextInput withAsterisk label={t('cvv')} placeholder={t('cvvPlaceholder')} {...register('cvv')} />
+                  <TextInput
+                    ref={expiryDate}
+                    withAsterisk
+                    label={t('expiryDate')}
+                    placeholder={t('expiryDatePlaceholder')}
+                    {...register('expiryDate')}
+                  />
+                  <TextInput ref={cvv} withAsterisk label={t('cvv')} placeholder={t('cvvPlaceholder')} {...register('cvv')} />
                 </div>
                 <TextInput withAsterisk label={t('cardholderName')} placeholder={t('cardholderNamePlaceholder')} {...register('cardholderName')} />
               </div>
@@ -222,7 +266,7 @@ export default function Signup() {
             </Button>
           </div>
           <div>
-            {plan ? (
+            {data ? (
               <div className="rounded-xl bg-white p-4 shadow">
                 <h4 className="font-semibold">{t('orderSummary')}</h4>
                 {/*<div className="flex justify-between">
@@ -231,27 +275,59 @@ export default function Signup() {
                 </div>*/}
                 <div className="flex justify-between">
                   <div>{t('initialSetupFee')}:</div>
-                  <div>{plan.initialAdmissionFee}円</div>
+                  <div>{data.initialAdmissionFee}円</div>
                 </div>
                 <div className="flex justify-between">
                   <div>{t('handlingFee')}:</div>
-                  <div>{plan.initialAdminFee}円</div>
+                  <div>{data.initialAdminFee}円</div>
                 </div>
                 <div className="flex justify-between">
                   <div>{t('monthlyFee')}:</div>
-                  <div>{plan.monthlyFee}円</div>
+                  <div>{data.monthlyFeeRemaining}円</div>
                 </div>
+                {couponData && (
+                  <div className="flex justify-between">
+                    <div>
+                      {t('discount')}
+                      {couponData?.discountType === 'PERCENTAGE' && `(${couponData?.discountValue}%)`}:
+                    </div>
+                    <div>
+                      -
+                      {couponData?.discountType === 'PERCENTAGE'
+                        ? Math.round((couponData?.discountValue / 100) * data.totalAmount)
+                        : couponData.discountValue}
+                      円
+                    </div>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <div>{t('VAT')}:</div>
                   <div>-</div>
                 </div>
+                {!rule && (
+                  <>
+                    <div className="mt-2 flex space-x-2">
+                      <TextInput
+                        className="flex-1"
+                        placeholder={t('couponPlaceholder')}
+                        onChange={({ currentTarget }) => setTempCouponCode(currentTarget.value)}
+                      />
+                      <Button type="button" size="sm" onClick={() => setCouponCode(tempCouponCode)}>
+                        {t('submitCoupon')}
+                      </Button>
+                    </div>
+                  </>
+                )}
                 <div className="mt-4 mb-4 flex justify-between border-t border-gray-300 pt-4 text-xl font-semibold">
                   <div>{t('total')}:</div>
-                  <div>{plan.initialAdmissionFee + plan.initialAdminFee + plan.monthlyFee}円</div>
+                  <div>
+                    {data.totalAmount -
+                      (couponData?.discountType === 'PERCENTAGE'
+                        ? Math.round((couponData?.discountValue / 100) * data.totalAmount)
+                        : couponData?.discountValue || 0)}
+                    円
+                  </div>
                 </div>
-                <Button fullWidth type="submit" disabled={values.acceptTos === false}>
-                  {t('register')}
-                </Button>
               </div>
             ) : (
               <Skeleton />

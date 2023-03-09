@@ -1,8 +1,9 @@
-import type { Plans } from '@/types';
+import type { Country, Coupon, iError, MemberFeeDetail, Plans } from '@/types';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import queryString from 'query-string';
 import { http } from '@/utilities';
+import toast from 'react-hot-toast';
 
 //prettier-ignore
 export const fetcher = (url: string) => http(url).then((res) => res.data).catch(({ response }) => response.data);
@@ -20,6 +21,57 @@ function useKey(path: string, params?: any) {
   }
 
   return finalQuery ? `${path}?${queryString.stringify(finalQuery)}` : `${path}`;
+}
+
+export function useCountries() {
+  const key = useKey('/address/public/countries');
+
+  const { data, error } = useSWR<Country[]>(key, fetcher, { onErrorRetry });
+
+  return {
+    countries: data?.map(({ code, nameJa }) => ({ value: code, label: nameJa })),
+    isLoading: !error && !data,
+    isError: error,
+  };
+}
+
+export function useMemberCalculateFeeDetail(planId: string, email: string, params?: object) {
+  const key = useKey(`/members/calculate-fee-details`, { planId, email, ...params });
+
+  const { data, error } = useSWR<MemberFeeDetail>(key, fetcher, { onErrorRetry });
+
+  return {
+    key,
+    data,
+    isLoading: !error && !data,
+    isError: error,
+  };
+}
+
+export function useDetectRule(params?: any) {
+  const key = useKey(`/pricing-rules/detect-rule`, params);
+
+  const { data, error } = useSWR<Coupon>(key, params?.amount ? fetcher : null, { onErrorRetry });
+
+  return {
+    key,
+    data,
+    isLoading: !error && !data,
+    isError: error,
+  };
+}
+
+export function useCoupon(params?: any) {
+  const key = useKey(`/pricing-rules/coupon`, params);
+
+  const { data, error } = useSWR<Coupon>(key, params?.amount && params?.couponCode ? fetcher : null, { onErrorRetry });
+
+  return {
+    key,
+    data,
+    isLoading: !error && !data,
+    isError: error,
+  };
 }
 
 export function usePlans(params = { sortBy: 'code', sortDir: 'asc' }) {

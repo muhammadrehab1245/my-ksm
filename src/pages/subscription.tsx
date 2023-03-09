@@ -11,7 +11,7 @@ export default function Subscription() {
   const { data } = usePlans();
 
   return (
-    <div className="flex h-screen flex-col bg-gray-100">
+    <div className="mb-8 flex flex-col bg-gray-100">
       <div className="flex-1">
         <div className="relative">
           <img className="h-72 w-full object-cover" src={'/images/banner.jpg'} alt="banner" />
@@ -30,13 +30,13 @@ export default function Subscription() {
                   <img className="inline" src="/icons/mark.svg" alt="mark" />
                   <span className="absolute left-0 top-1.5 w-full text-center text-xl text-white">{index + 1}</span>
                 </div>
-                <h2 className="text-2xl">{t(code) || name}</h2>
+                <h2 className="text-2xl">{name}</h2>
                 <div>
                   <span className="text-3xl font-bold text-primary-500">￥{monthlyFee}</span>
                   <span className="pl-1 text-sm">{t('afterPrice')}</span>
                 </div>
                 <div dangerouslySetInnerHTML={{ __html: description }} />
-                <Link href={`/signup/${id}`}>
+                <Link className="mt-4 inline-block" href={`/signup/${id}`}>
                   <Button>{t('select')}</Button>
                 </Link>
               </div>
