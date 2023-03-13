@@ -13,7 +13,7 @@ import { useForm, yupResolver } from '@mantine/form';
 import { Alert, Button, Modal, Radio, Select, TextInput } from '@mantine/core';
 import { date, object, string } from 'yup';
 import { useCountries, useCoupon, useDetectRule, useMemberCalculateFeeDetail } from '@/hooks/fetch';
-import { http } from '@/utilities';
+import { http, store } from '@/utilities';
 import { Skeleton } from '@/components';
 import { FiCalendar, FiCheckCircle, FiChevronRight } from 'react-icons/fi';
 import 'dayjs/locale/ja';
@@ -126,10 +126,14 @@ export default function Signup() {
           if (resultCode != '000') {
             toast.error(t('cardError'));
           } else {
-            http.post('/organizations/public/subscribe', { ...data, cardToken: tokenObject?.token }).then(() => {
-              toast.success(t('itemAdded'));
-              push('/success');
-            });
+            http
+              .post('/organizations/public/subscribe', { ...data, cardToken: tokenObject?.token })
+              .then(({ data }) => {
+                toast.success(t('successfullyRegistered'));
+                store.userInfo = data;
+                push('/success');
+              })
+              .catch((error) => toast.error(error?.response?.data?.stack || error.message));
           }
         },
       );
