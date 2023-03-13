@@ -2,16 +2,17 @@ import type { GetServerSideProps } from 'next';
 import type { Coupon } from '@/types';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import clsx from 'clsx';
-import iMask, { MaskedRange } from 'imask';
-import toast from 'react-hot-toast';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { DatePicker } from '@mantine/dates';
-import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
-import { useForm, yupResolver } from '@mantine/form';
-import { Alert, Button, Modal, Radio, Select, TextInput } from '@mantine/core';
+import clsx from 'clsx';
+import iMask, { MaskedRange } from 'imask';
+import dayjs from 'dayjs';
+import toast from 'react-hot-toast';
 import { date, object, string } from 'yup';
+import { DatePicker } from '@mantine/dates';
+import { useForm, yupResolver } from '@mantine/form';
+import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
+import { Alert, Button, Modal, Radio, Select, TextInput } from '@mantine/core';
 import { useCountries, useCoupon, useDetectRule, useMemberCalculateFeeDetail } from '@/hooks/fetch';
 import { http, store } from '@/utilities';
 import { Skeleton } from '@/components';
@@ -46,7 +47,7 @@ export default function Signup() {
   }, []);
 
   const schema = object({
-    email: string().email(t('emailRequired')),
+    email: string().email(t('emailRequired')).required(t('required')),
     firstName: string().required(t('required')),
     lastName: string().required(t('required')),
     gender: string().required(t('required')),
@@ -144,7 +145,7 @@ export default function Signup() {
           toast.success(t('itemAdded'));
           push('/success');
         })
-        .catch((error) => toast.error(error.message));
+        .catch((error) => toast.error(error?.response?.data?.stack || error.message));
     }
   });
 
@@ -173,7 +174,7 @@ export default function Signup() {
           <div className="space-y-4">
             <div className="text-right text-red-500">* {t('required')}</div>
             <h3 className="h5">{t('basicInfo')}</h3>
-            <TextInput label={t('email')} placeholder={t('emailPlaceholder')} {...register('email')} />
+            <TextInput withAsterisk label={t('email')} placeholder={t('emailPlaceholder')} {...register('email')} />
             <div className="grid grid-cols-2 gap-4">
               <TextInput withAsterisk label={t('firstName')} placeholder={t('firstNamePlaceholder')} {...register('firstName')} />
               <TextInput withAsterisk label={t('lastName')} placeholder={t('lastNamePlaceholder')} {...register('lastName')} />
@@ -191,6 +192,7 @@ export default function Signup() {
               locale="ja"
               icon={<FiCalendar />}
               {...register('dob')}
+              maxDate={new Date()}
             />
             <TextInput withAsterisk label={t('phone')} placeholder={t('phone')} {...register('phone')} />
             {countries && (
