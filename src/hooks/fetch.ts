@@ -35,6 +35,30 @@ export function useCountries() {
   };
 }
 
+export function usePrefectures() {
+  const key = useKey('/address/public/prefectures');
+
+  const { data, error } = useSWR<string[]>(key, fetcher, { onErrorRetry });
+
+  return {
+    prefectures: data,
+    isLoading: !error && !data,
+    isError: error,
+  };
+}
+
+export function useSearchZipcode(zipCode: string) {
+  const key = useKey('/address/public/search', { zipCode });
+
+  const { data, error } = useSWR<ZipCode>(key, fetcher, { onErrorRetry });
+
+  return {
+    data,
+    isLoading: !error && !data,
+    isError: error,
+  };
+}
+
 export function useMemberCalculateFeeDetail(planId: string, email: string, params?: object) {
   const key = useKey(`/members/calculate-fee-details`, { planId, email, ...params });
 

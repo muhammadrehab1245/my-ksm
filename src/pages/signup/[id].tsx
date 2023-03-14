@@ -11,8 +11,8 @@ import { date, object, string } from 'yup';
 import { DatePicker } from '@mantine/dates';
 import { useForm, yupResolver } from '@mantine/form';
 import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
-import { Alert, Button, Modal, Radio, Select, TextInput } from '@mantine/core';
-import { useCountries, useCoupon, useDetectRule, useMemberCalculateFeeDetail } from '@/hooks/fetch';
+import { Alert, Button, Input, Modal, Radio, Select, TextInput } from '@mantine/core';
+import { useCountries, useCoupon, useDetectRule, useMemberCalculateFeeDetail, usePrefectures, useSearchZipcode } from '@/hooks/fetch';
 import { http, store } from '@/utilities';
 import { Skeleton } from '@/components';
 import { FiCalendar, FiCheckCircle, FiChevronRight } from 'react-icons/fi';
@@ -22,6 +22,7 @@ export default function Signup() {
   const { t } = useTranslation();
   const { query, push } = useRouter();
   const { countries } = useCountries();
+  const { prefectures } = usePrefectures();
   const [opened, { toggle }] = useDisclosure(false);
   const cardNumber = useRef(null);
   const cvv = useRef(null);
@@ -167,6 +168,18 @@ export default function Signup() {
     }
   }, [rule, coupon]);
 
+  const [zipSearch, setZipSearch] = useState(0);
+  const [zipCode, setZipCode] = useState('');
+  const { data: zipData } = useSearchZipcode(zipCode);
+  useEffect(() => {
+    setZipCode(values.zipCode);
+  }, [zipSearch]);
+  useEffect(() => {
+    if (zipData?.prefecture) setFieldValue('prefecture', zipData?.prefecture);
+    if (zipData?.municipality) setFieldValue('municipality', zipData?.municipality);
+    if (zipData?.town) setFieldValue('town', zipData?.town);
+  }, [zipData]);
+
   return (
     <div className="container py-12">
       <form onSubmit={onSubmit}>
@@ -205,12 +218,27 @@ export default function Signup() {
                 {...register('nationality')}
               />
             )}
-            {values.nationality === 'JP' && (
-              <div className="flex gap-4">
-                <TextInput withAsterisk label={t('zipCode')} placeholder={t('zipCodePlaceholder')} {...register('zipCode')} />
-                <TextInput className="flex-1" withAsterisk label={t('address')} placeholder={t('addressPlaceholder')} {...register('address')} />
+            <Input.Wrapper withAsterisk label={t('zipCode')}>
+              <div className="flex gap-2">
+                <TextInput placeholder={t('zipCodePlaceholder')} {...register('zipCode')} />
+                <Button size="sm" type="button" onClick={() => setZipSearch(Math.random())}>
+                  {t('search')}
+                </Button>
               </div>
+            </Input.Wrapper>
+            {prefectures && (
+              <Select
+                searchable
+                withAsterisk
+                label={t('prefecture')}
+                placeholder={t('selectPlaceholder')}
+                data={prefectures}
+                {...register('prefecture')}
+              />
             )}
+            <TextInput withAsterisk label={t('municipality')} {...register('municipality')} />
+            <TextInput withAsterisk label={t('town')} {...register('town')} />
+            <TextInput withAsterisk label={t('address')} placeholder={t('addressPlaceholder')} {...register('address')} />
             <h3 className="h5">{t('paymentInformation')}</h3>
             <Radio value="CARD" checked={values.paymentMethod === 'CARD'} label={t('creditCard')} onChange={register('paymentMethod').onChange} />
             {values.paymentMethod === 'CARD' && (

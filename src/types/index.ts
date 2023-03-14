@@ -31,6 +31,13 @@ export interface General {
   empty: boolean;
 }
 
+export interface ZipCode {
+  zipCode: string;
+  prefecture: string;
+  municipality: string;
+  town: string;
+}
+
 export interface Country {
   code: string;
   nameEn: string;
