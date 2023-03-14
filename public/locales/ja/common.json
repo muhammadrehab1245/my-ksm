@@ -67,6 +67,7 @@
   "VAT": "消費税(税込)",
   "total": "合計",
   "name": "名前",
+  "memberNo": "会員番号",
   "successfullyRegistered": "会員登録が完了しました",
   "goBackToMainPage": "メインページへ戻る",
   "sendRegistrationInfoToEmail": "会員情報をメールへ送信",

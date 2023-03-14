@@ -140,8 +140,9 @@ export default function Signup() {
     } else {
       http
         .post('/organizations/public/subscribe', data)
-        .then(() => {
-          toast.success(t('itemAdded'));
+        .then(({ data }) => {
+          toast.success(t('successfullyRegistered'));
+          store.userInfo = data;
           push('/success');
         })
         .catch((error) => toast.error(error?.response?.data?.stack || error.message));

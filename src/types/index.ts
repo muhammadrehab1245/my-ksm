@@ -89,3 +89,52 @@ export interface Plan {
 export interface Plans extends General {
   content: Plan[];
 }
+
+export interface MemberDetail {
+  user: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    phoneCountryCode: string;
+    dob: Date | string;
+    gender: string;
+    disabled: boolean | string;
+    nationality: string;
+    zipCode: string;
+    address: string;
+    memberType: string;
+    gmoMemberId: string;
+    cardRegistered: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+  subscription: {
+    id: string;
+    kcId: string;
+    email: string;
+    planId: string;
+    orgId: string;
+    trialUntil: Date;
+    nextBillingDay: string;
+    startingPricePeriodUntil: string;
+    disabled: boolean | string;
+    disabledAt: Date;
+    disabledByKcId: string;
+    subscriptionEndedAt: Date;
+    memberStatus: string;
+    memberNo: number;
+    paymentMethod: string;
+    registrationDate: Date | string;
+    initialAdminFee: number;
+    initialAdmissionFee: number;
+    monthlyFee: number;
+    monthlyFeeStartingPeriod: number;
+    pricesLastUpdatedAt: Date;
+    createdAt: Date;
+    updatedAt: Date;
+    lockPinId: string;
+    qrCode: string;
+  };
+}
