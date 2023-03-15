@@ -3,13 +3,15 @@ import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useSnapshot } from 'valtio';
-import { Button } from '@mantine/core';
+import { Button, Modal, TextInput } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { store } from '@/utilities';
 import { FiCheckCircle } from 'react-icons/fi';
 
 export default function Success() {
   const { t } = useTranslation();
   const { userInfo } = useSnapshot(store);
+  const [opened, { open, close }] = useDisclosure(false);
 
   return (
     <div className="mx-auto my-12 max-w-1/3">
@@ -58,7 +60,17 @@ export default function Success() {
           </div>
         </div>
       </div>
-      <Button className="my-4" fullWidth>
+      <Modal opened={opened} onClose={close} centered title={t('sendRegistrationInfo')}>
+        <p className="mb-6">{t('toSendTheRegistrationInformationPleaseEnterYourEmailAddress')}</p>
+        <TextInput label={t('email')} placeholder={t('emailPlaceholder')} />
+        <div className="mt-4 grid grid-cols-2 gap-4">
+          <Button variant="outline" onClick={close}>
+            {t('cancel')}
+          </Button>
+          <Button>{t('send')}</Button>
+        </div>
+      </Modal>
+      <Button className="my-4" fullWidth onClick={open}>
         {t('sendTheRegistrationInfoToEmail')}
       </Button>
       <Link href="/subscription">
