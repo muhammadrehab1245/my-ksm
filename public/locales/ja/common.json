@@ -77,5 +77,6 @@
   "sendRegistrationInfo": "会員情報送信",
   "sendRegistrationInfoInstructions": "会員情報を送信するため、メールアドレスを入力してください",
   "registrationInfoSentSuccessfully": "会員情報の送信が完了しました",
-  "infoWasSentTo": "{{email}}に会員情報を送信しました。"
+  "infoWasSentTo": "{{email}}に会員情報を送信しました。",
+  "sendTheRegistrationInfoToEmail": "登録情報をメールに送信"
 }
