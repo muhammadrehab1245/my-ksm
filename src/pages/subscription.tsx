@@ -32,7 +32,9 @@ export default function Subscription() {
                 </div>
                 <h2 className="text-2xl">{name}</h2>
                 {tags.map(({ name }, index) => (
-                  <Badge key={index}>{name}</Badge>
+                  <Badge className="mr-2 mb-2" key={index}>
+                    {name}
+                  </Badge>
                 ))}
 
                 <div>
