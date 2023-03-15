@@ -2,7 +2,7 @@ import type { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { Button } from '@mantine/core';
+import { Badge, Button } from '@mantine/core';
 import { usePlans } from '@/hooks/fetch';
 import { Skeleton } from '@/components';
 
@@ -24,13 +24,19 @@ export default function Subscription() {
         </div>
         <div className="relative z-10 mx-auto -mt-8 grid max-w-[1400px] gap-4 px-8 lg:grid-cols-2 xl:grid-cols-4">
           {data ? (
-            data.map(({ id, name, monthlyFee, description, code }, index) => (
+            data.map(({ id, name, monthlyFee, description, code, tags }, index) => (
               <div className="space-y-2 rounded-xl bg-white p-8 text-center" key={index}>
                 <div className="relative inline-block">
                   <img className="inline" src="/icons/mark.svg" alt="mark" />
                   <span className="absolute left-0 top-1.5 w-full text-center text-xl text-white">{index + 1}</span>
                 </div>
                 <h2 className="text-2xl">{name}</h2>
+                {tags.map(({ name }, index) => (
+                  <Badge className="mr-2 mb-2" key={index}>
+                    {name}
+                  </Badge>
+                ))}
+
                 <div>
                   <span className="text-3xl font-bold text-primary-500">￥{monthlyFee}</span>
                   <span className="pl-1 text-sm">{t('afterPrice')}</span>

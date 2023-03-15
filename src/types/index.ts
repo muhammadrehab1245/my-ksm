@@ -31,6 +31,13 @@ export interface General {
   empty: boolean;
 }
 
+export interface ZipCode {
+  zipCode: string;
+  prefecture: string;
+  municipality: string;
+  town: string;
+}
+
 export interface Country {
   code: string;
   nameEn: string;
@@ -74,6 +81,11 @@ export interface Plan {
   code: string;
   description: string;
   tagIds: string[];
+  tags: Array<{
+    category: string;
+    id: string;
+    name: string;
+  }>;
   minimumAge: number;
   maximumAge: number;
   initialAdminFee: number;
@@ -88,4 +100,53 @@ export interface Plan {
 
 export interface Plans extends General {
   content: Plan[];
+}
+
+export interface MemberDetail {
+  user: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    phoneCountryCode: string;
+    dob: Date | string;
+    gender: string;
+    disabled: boolean | string;
+    nationality: string;
+    zipCode: string;
+    address: string;
+    memberType: string;
+    gmoMemberId: string;
+    cardRegistered: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+  subscription: {
+    id: string;
+    kcId: string;
+    email: string;
+    planId: string;
+    orgId: string;
+    trialUntil: Date;
+    nextBillingDay: string;
+    startingPricePeriodUntil: string;
+    disabled: boolean | string;
+    disabledAt: Date;
+    disabledByKcId: string;
+    subscriptionEndedAt: Date;
+    memberStatus: string;
+    memberNo: number;
+    paymentMethod: string;
+    registrationDate: Date | string;
+    initialAdminFee: number;
+    initialAdmissionFee: number;
+    monthlyFee: number;
+    monthlyFeeStartingPeriod: number;
+    pricesLastUpdatedAt: Date;
+    createdAt: Date;
+    updatedAt: Date;
+    lockPinId: string;
+    qrCode: string;
+  };
 }
