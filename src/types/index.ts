@@ -81,6 +81,11 @@ export interface Plan {
   code: string;
   description: string;
   tagIds: string[];
+  tags: Array<{
+    category: string;
+    id: string;
+    name: string;
+  }>;
   minimumAge: number;
   maximumAge: number;
   initialAdminFee: number;
