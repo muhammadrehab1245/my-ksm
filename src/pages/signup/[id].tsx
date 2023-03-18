@@ -47,7 +47,7 @@ export default function Signup() {
   }, []);
 
   const schema = object({
-    email: string().email(t('emailRequired')).required(t('required')),
+    email: string().email(t('emailRequired')),
     firstName: string().required(t('required')),
     lastName: string().required(t('required')),
     gender: string().required(t('required')),
@@ -187,7 +187,7 @@ export default function Signup() {
           <div className="space-y-4">
             <div className="text-right text-red-500">* {t('required')}</div>
             <h3 className="h5">{t('basicInfo')}</h3>
-            <TextInput withAsterisk label={t('email')} placeholder={t('emailPlaceholder')} {...register('email')} />
+            <TextInput label={t('email')} placeholder={t('emailPlaceholder')} {...register('email')} />
             <div className="grid grid-cols-2 gap-4">
               <TextInput withAsterisk label={t('firstName')} placeholder={t('firstNamePlaceholder')} {...register('firstName')} />
               <TextInput withAsterisk label={t('lastName')} placeholder={t('lastNamePlaceholder')} {...register('lastName')} />
