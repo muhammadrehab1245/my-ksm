@@ -9,13 +9,13 @@ export const Footer = () => {
     <footer className="container flex flex-wrap justify-between py-3">
       <ul className="flex flex-wrap space-x-4">
         <li>
-          <Link className="flex items-center hover:underline" href="/privacy-policy" target="_blank">
+          <Link className="flex items-center hover:underline" href="/hotus/privacy-policy" target="_blank">
             {t('privacyPolicy')}
             <IconExternalLink className="ml-1 inline" size={20} stroke={1} />
           </Link>
         </li>
         <li>
-          <Link className="flex items-center hover:underline" href="/terms-and-conditions" target="_blank">
+          <Link className="flex items-center hover:underline" href="/hotus/terms-and-conditions" target="_blank">
             {t('termsAndConditions')}
             <IconExternalLink className="ml-1 inline" size={20} stroke={1} />
           </Link>
