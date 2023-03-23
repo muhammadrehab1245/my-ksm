@@ -177,7 +177,7 @@ export default function Signup() {
   useEffect(() => {
     if (zipData?.prefecture) setFieldValue('prefecture', zipData?.prefecture);
     if (zipData?.municipality) setFieldValue('municipality', zipData?.municipality);
-    if (zipData?.town) setFieldValue('town', zipData?.town);
+    if (zipData?.town) setFieldValue('address', zipData?.town);
   }, [zipData]);
 
   return (
@@ -237,7 +237,6 @@ export default function Signup() {
               />
             )}
             <TextInput withAsterisk label={t('municipality')} {...register('municipality')} />
-            <TextInput withAsterisk label={t('town')} {...register('town')} />
             <TextInput withAsterisk label={t('address')} placeholder={t('addressPlaceholder')} {...register('address')} />
             <h3 className="h5">{t('paymentInformation')}</h3>
             <Radio value="CARD" checked={values.paymentMethod === 'CARD'} label={t('creditCard')} onChange={register('paymentMethod').onChange} />
