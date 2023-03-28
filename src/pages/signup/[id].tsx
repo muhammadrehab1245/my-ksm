@@ -13,7 +13,7 @@ import { useForm, yupResolver } from '@mantine/form';
 import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import { Alert, Button, Input, Modal, Radio, Select, TextInput } from '@mantine/core';
 import { useCountries, useCoupon, useDetectRule, useMemberCalculateFeeDetail, usePrefectures, useSearchZipcode } from '@/hooks/fetch';
-import { http, store } from '@/utilities';
+import { countryCodes, http, store } from '@/utilities';
 import { Skeleton } from '@/components';
 import { FiCalendar, FiCheckCircle, FiChevronRight } from 'react-icons/fi';
 import 'dayjs/locale/ja';
@@ -80,6 +80,7 @@ export default function Signup() {
       gender: 'MALE',
       dob: undefined,
       phone: '',
+      phoneCountryCode: '+81',
       zipCode: '',
       address: '',
       paymentMethod: 'CARD',
@@ -207,7 +208,10 @@ export default function Signup() {
               {...register('dob')}
               maxDate={new Date()}
             />
-            <TextInput withAsterisk label={t('phone')} placeholder={t('phone')} {...register('phone')} />
+            <div className="flex gap-4">
+              <Select searchable withAsterisk label={t('phoneCountryCode')} data={countryCodes} {...register('phoneCountryCode')} />
+              <TextInput className="flex-1" withAsterisk label={t('phone')} placeholder={t('phone')} {...register('phone')} />
+            </div>
             {countries && (
               <Select
                 searchable
