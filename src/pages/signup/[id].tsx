@@ -54,6 +54,7 @@ export default function Signup() {
     dob: date().required(t('required')),
     nationality: string().required(t('required')),
     phone: string().required(t('required')),
+    phoneCountryCode: string().required(t('required')),
     paymentMethod: string().required(t('required')),
     zipCode: string().when('nationality', { is: (nat: string) => nat === 'JP', then: (schema) => schema.required(t('required')) }),
     address: string().when('nationality', { is: (nat: string) => nat === 'JP', then: (schema) => schema.required(t('required')) }),
