@@ -1,9 +1,8 @@
-import type { Country, Coupon, iError, MemberFeeDetail, Plans } from '@/types';
+import type { Country, Coupon, iError, MemberFeeDetail, Plans, ZipCode } from '@/types';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import queryString from 'query-string';
 import { http } from '@/utilities';
-import toast from 'react-hot-toast';
 
 //prettier-ignore
 export const fetcher = (url: string) => http(url).then((res) => res.data).catch(({ response }) => response.data);

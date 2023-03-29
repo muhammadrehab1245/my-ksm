@@ -1,17 +1,25 @@
 import type { GetStaticProps } from 'next';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useSnapshot } from 'valtio';
 import { Button, Modal, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { useCountries } from '@/hooks/fetch';
 import { store } from '@/utilities';
 import { FiCheckCircle } from 'react-icons/fi';
 
 export default function Success() {
   const { t } = useTranslation();
+  const { countries } = useCountries();
   const { userInfo } = useSnapshot(store);
+  const [nationality, setNationality] = useState<string | undefined>();
   const [opened, { open, close }] = useDisclosure(false);
+
+  useEffect(() => {
+    setNationality(countries?.find(({ value }) => value === userInfo?.user?.nationality)?.label);
+  }, [countries]);
 
   return (
     <div className="mx-auto my-12 max-w-1/3">
@@ -33,7 +41,7 @@ export default function Success() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <div className="text-xs">{t('gender')}</div>
-                <div>{userInfo?.user?.gender}</div>
+                <div>{t(userInfo?.user?.gender)}</div>
               </div>
               <div>
                 <div className="text-xs">{t('dob')}</div>
@@ -46,7 +54,7 @@ export default function Success() {
             </div>
             <div>
               <div className="text-xs">{t('nationality')}</div>
-              <div>{userInfo?.user?.nationality}</div>
+              <div>{nationality}</div>
             </div>
             <div>
               <div className="text-xs">{t('address')}</div>
@@ -55,7 +63,7 @@ export default function Success() {
             </div>
             <div>
               <div className="text-xs">{t('paymentMethod')}</div>
-              <div>{userInfo?.user?.cardRegistered ? t('card') : t('transfer')}</div>
+              <div>{userInfo?.user?.cardRegistered ? t('CARD') : t('TRANSFER')}</div>
             </div>
           </div>
         </div>

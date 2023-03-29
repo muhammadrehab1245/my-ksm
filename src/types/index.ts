@@ -44,6 +44,13 @@ export interface Country {
   nameJa: string;
 }
 
+export interface ZipCode {
+  zipCode: string;
+  prefecture: string;
+  municipality: string;
+  town: string;
+}
+
 export interface Coupon {
   id: string;
   orgId: string;

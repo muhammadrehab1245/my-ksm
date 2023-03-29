@@ -81,5 +81,10 @@
   "infoWasSentTo": "{{email}}に会員情報を送信しました。",
   "toSendTheRegistrationInformationPleaseEnterYourEmailAddress": "登録情報を送信するには、メールアドレスを入力してください。",
   "sendTheRegistrationInfoToEmail": "登録情報をメールに送信",
-  "search": "検索"
+  "search": "検索",
+  "CARD": "カード",
+  "TRANSFER": "口座振替",
+  "MALE": "男性",
+  "FEMALE": "女性",
+  "UNDISCLOSED": "その他"
 }
