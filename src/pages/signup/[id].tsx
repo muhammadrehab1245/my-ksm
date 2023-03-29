@@ -11,10 +11,11 @@ import { date, object, string } from 'yup';
 import { DatePicker } from '@mantine/dates';
 import { useForm, yupResolver } from '@mantine/form';
 import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
-import { Button, Input, Modal, Radio, Select, TextInput } from '@mantine/core';
+import { Alert, Button, Input, Modal, Radio, Select, TextInput } from '@mantine/core';
 import { useCountries, useCoupon, useDetectRule, useMemberCalculateFeeDetail, usePrefectures, useSearchZipcode } from '@/hooks/fetch';
 import { countryCodes, http, store } from '@/utilities';
-import { Skeleton, TermsAndConditions } from '@/components';
+import { Skeleton } from '@/components';
+import TermsAndConditions from '@/pages/hotus/terms-and-conditions';
 import { FiCalendar, FiCheckCircle, FiChevronRight } from 'react-icons/fi';
 import 'dayjs/locale/ja';
 
@@ -290,8 +291,10 @@ export default function Signup() {
               </span>
               <FiChevronRight />
             </button>
-            <Modal opened={opened} onClose={toggle} title={t('termsAndConditions')} size="lg" classNames={{ title: 'h3' }} centered>
-              <TermsAndConditions />
+            <Modal opened={opened} onClose={toggle} title={t('termsAndConditions')} size="xl" classNames={{ title: 'h3' }} centered>
+              <Alert>
+                <TermsAndConditions />
+              </Alert>
               <Button
                 onClick={() => {
                   setFieldValue('acceptTos', true);
