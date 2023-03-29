@@ -59,6 +59,8 @@ export default function Success() {
             <div>
               <div className="text-xs">{t('address')}</div>
               <div>{userInfo?.user?.zipCode}</div>
+              <div>{userInfo?.user?.prefecture}</div>
+              <div>{userInfo?.user?.municipality}</div>
               <div>{userInfo?.user?.address}</div>
             </div>
             <div>

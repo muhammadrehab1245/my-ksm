@@ -36,7 +36,7 @@ export default function Signup() {
     // @ts-ignore
     iMask(cardNumber.current, { mask: '0000 0000 0000 0000' });
     // @ts-ignore
-    iMask(cvv.current, { mask: Number, min: 0, max: 999 });
+    iMask(cvv.current, { mask: Number, min: 0, max: 9999 });
     // @ts-ignore
     iMask(expiryDate.current, {
       mask: 'm/y',
@@ -208,6 +208,7 @@ export default function Signup() {
             <DatePicker
               withAsterisk
               inputFormat="YYYY/MM/DD"
+              labelFormat="YYYY/MM"
               label={t('dob')}
               placeholder={t('datePlaceholder')}
               locale="ja"

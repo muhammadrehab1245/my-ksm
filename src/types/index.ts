@@ -122,6 +122,8 @@ export interface MemberDetail {
     disabled: boolean | string;
     nationality: string;
     zipCode: string;
+    prefecture: string;
+    municipality: string;
     address: string;
     memberType: string;
     gmoMemberId: string;
