@@ -35,6 +35,7 @@
   "selectPlaceholder": "選択してください",
   "datePlaceholder": "日付を選択してください",
   "phone": "電話番号（ハイフンなし）",
+  "phoneCountryCode": "国コード",
   "phonePlaceholder": "",
   "nationality": "国籍",
   "nationalityPlaceholder": "選択してください",
