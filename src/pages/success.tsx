@@ -50,7 +50,9 @@ export default function Success() {
             </div>
             <div>
               <div className="text-xs">{t('phone')}</div>
-              <div>{userInfo?.user?.phone}</div>
+              <div>
+                {userInfo?.user?.phoneCountryCode} {userInfo?.user?.phone}
+              </div>
             </div>
             <div>
               <div className="text-xs">{t('nationality')}</div>
