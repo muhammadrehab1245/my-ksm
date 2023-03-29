@@ -46,7 +46,7 @@
   "zipCode": "郵便番号（ハイフンなし）",
   "zipCodePlaceholder": "例：0993698",
   "address": "住所",
-  "addressPlaceholder": "例：北海道斜里郡小清水町元町00",
+  "addressPlaceholder": "",
   "paymentMethod": "支払い方法",
   "paymentInformation": "支払い情報",
   "creditCard": "クレジットカード",
