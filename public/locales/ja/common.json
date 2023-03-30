@@ -82,6 +82,7 @@
   "toSendTheRegistrationInformationPleaseEnterYourEmailAddress": "登録情報を送信するには、メールアドレスを入力してください。",
   "sendTheRegistrationInfoToEmail": "登録情報をメールに送信",
   "search": "検索",
+  "emailExist": "メールあり",
   "CARD": "カード",
   "TRANSFER": "口座振替",
   "MALE": "男性",

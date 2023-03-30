@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import dayjs from 'dayjs';
+import toast from 'react-hot-toast';
 import { date, object, string } from 'yup';
 import { DatePicker } from '@mantine/dates';
 import { useForm, yupResolver } from '@mantine/form';
@@ -58,16 +59,24 @@ export default function Subscription() {
     validate: yupResolver(schema),
   });
   const onSubmit = handleSubmit((values) => {
-    http
-      .post('/members/member-type/search', {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        dob: dayjs(values.dob).format('YYYY-MM-DD'),
-      })
-      .then(({ data }) => {
+    const data = { firstName: values.firstName, lastName: values.lastName, dob: dayjs(values.dob).format('YYYY-MM-DD') };
+    if (values?.email) {
+      http('/auth/email-available', { params: { email: values.email } }).then(({ data }) => {
+        if (data?.available === false) {
+          toast.error(t('emailExist'));
+        } else {
+          http.post('/members/member-type/search', data).then(({ data }) => {
+            setMemberType(data?.memberType);
+            nextStep();
+          });
+        }
+      });
+    } else {
+      http.post('/members/member-type/search', data).then(({ data }) => {
         setMemberType(data?.memberType);
         nextStep();
       });
+    }
   });
 
   const [zipSearch, setZipSearch] = useState(0);
