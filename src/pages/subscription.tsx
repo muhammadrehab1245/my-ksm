@@ -84,6 +84,11 @@ export default function Subscription() {
     }
   });
 
+  const [nationality, setNationality] = useState<string | undefined>();
+  useEffect(() => {
+    setNationality(countries?.find(({ value }) => value === values?.nationality)?.label);
+  }, [countries]);
+
   const [zipSearch, setZipSearch] = useState(0);
   const [zipCode, setZipCode] = useState('');
   const { data: zipData } = useSearchZipcode(zipCode);
@@ -265,6 +270,16 @@ export default function Subscription() {
                   <div className="text-xs">{t('phone')}</div>
                   <div>
                     {values.phoneCountryCode} {values.phone}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs">{t('nationality')}</div>
+                  <div>{nationality}</div>
+                </div>
+                <div>
+                  <div className="text-xs">{t('address')}</div>
+                  <div>
+                    {values?.zipCode} {values?.prefecture} {values?.municipality} {values?.address}
                   </div>
                 </div>
               </div>
