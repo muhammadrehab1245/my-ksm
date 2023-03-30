@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import clsx from 'clsx';
@@ -12,7 +12,7 @@ import { http, store } from '@/utilities';
 import { FiCheckCircle, FiChevronRight } from 'react-icons/fi';
 import TermsAndConditions from '@/pages/hotus/terms-and-conditions';
 
-export const PaymentForm = () => {
+export const PaymentForm: FC<{ info: any; planId?: string }> = ({ info, planId }) => {
   const { t } = useTranslation();
   const { push } = useRouter();
 
@@ -69,6 +69,8 @@ export const PaymentForm = () => {
     const { paymentMethod, cardNumber, expiryDate, cvv, cardholderName } = values;
 
     const data = {
+      ...info,
+      planId,
       paymentMethod,
       orgId: process.env.NEXT_PUBLIC_HOTUS_ORG_ID,
     };
