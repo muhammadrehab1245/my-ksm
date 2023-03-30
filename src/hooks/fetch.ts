@@ -58,10 +58,10 @@ export function useSearchZipcode(zipCode: string) {
   };
 }
 
-export function useMemberCalculateFeeDetail(planId: string, email: string, params?: object) {
+export function useMemberCalculateFeeDetail(planId?: string, email?: string, params?: object) {
   const key = useKey(`/members/calculate-fee-details`, { planId, email, ...params });
 
-  const { data, error } = useSWR<MemberFeeDetail>(key, fetcher, { onErrorRetry });
+  const { data, error } = useSWR<MemberFeeDetail>(key, planId ? fetcher : null, { onErrorRetry });
 
   return {
     key,

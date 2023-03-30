@@ -1,6 +1,6 @@
 import type { GetStaticProps } from 'next';
+import { Coupon, Plan } from '@/types';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import dayjs from 'dayjs';
@@ -9,18 +9,23 @@ import { date, object, string } from 'yup';
 import { DatePicker } from '@mantine/dates';
 import { useForm, yupResolver } from '@mantine/form';
 import { Badge, Button, Input, Radio, Select, Stepper, TextInput } from '@mantine/core';
-import { useCountries, usePlans, usePrefectures, useSearchZipcode } from '@/hooks/fetch';
+import { useCountries, useCoupon, useDetectRule, useMemberCalculateFeeDetail, usePlans, usePrefectures, useSearchZipcode } from '@/hooks/fetch';
 import { countryCodes, http } from '@/utilities';
-import { Skeleton } from '@/components';
+import { PaymentForm, Skeleton } from '@/components';
 import { FiCalendar } from 'react-icons/fi';
 
 export default function Subscription() {
   const { t } = useTranslation();
   const [active, setActive] = useState(0);
+  const [selectedPlan, setSelectedPlan] = useState<Plan>();
   const [memberType, setMemberType] = useState();
   const { data } = usePlans({ memberType });
   const nextStep = () => setActive((current) => (current < 3 ? current + 1 : current));
   const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
+
+  const [tempCouponCode, setTempCouponCode] = useState('');
+  const [couponCode, setCouponCode] = useState('');
+  const [couponData, setCouponData] = useState<Coupon>();
 
   const { countries } = useCountries();
   const { prefectures } = usePrefectures();
@@ -91,8 +96,25 @@ export default function Subscription() {
     if (zipData?.town) setFieldValue('address', zipData?.town);
   }, [zipData]);
 
+  const { data: planData } = useMemberCalculateFeeDetail(selectedPlan?.id, values.email);
+  const { data: rule, isLoading } = useDetectRule({ planId: selectedPlan, amount: planData?.totalAmount });
+  const { data: coupon } = useCoupon({ planId: selectedPlan, amount: planData?.totalAmount, couponCode, quantity: 1 });
+
+  useEffect(() => {
+    if (rule) {
+      setCouponData(rule);
+    } else if (coupon?.ruleType) {
+      setCouponData(coupon);
+      toast.success(t('couponApplied'));
+    } else if (coupon?.error) {
+      toast.error(coupon?.stack);
+    } else {
+      setCouponData(null);
+    }
+  }, [rule, coupon]);
+
   return (
-    <div className="container my-12 lg:max-w-1/2">
+    <div className="container my-12">
       <Stepper active={active} onStepClick={setActive} allowNextStepsSelect={false} breakpoint="sm">
         <Stepper.Step label="Basic information">
           <form className="my-8" onSubmit={onSubmit}>
@@ -173,27 +195,32 @@ export default function Subscription() {
               </div>
               <div className="relative z-10 mx-auto -mt-8 grid max-w-[1400px] gap-4 px-8 lg:grid-cols-2 xl:grid-cols-4">
                 {data ? (
-                  data.map(({ id, name, monthlyFee, description, code, tags }, index) => (
+                  data.map((item, index) => (
                     <div className="space-y-2 rounded-xl bg-white p-8 text-center" key={index}>
                       <div className="relative inline-block">
                         <img className="inline" src="/icons/mark.svg" alt="mark" />
                         <span className="absolute left-0 top-1.5 w-full text-center text-xl text-white">{index + 1}</span>
                       </div>
-                      <h2 className="text-2xl">{name}</h2>
-                      {tags.map(({ name }, index) => (
+                      <h2 className="text-2xl">{item?.name}</h2>
+                      {item?.tags.map(({ name }, index) => (
                         <Badge className="mr-2 mb-2" key={index}>
                           {name}
                         </Badge>
                       ))}
-
                       <div>
-                        <span className="text-3xl font-bold text-primary-500">￥{monthlyFee}</span>
+                        <span className="text-3xl font-bold text-primary-500">￥{item?.monthlyFee}</span>
                         <span className="pl-1 text-sm">{t('afterPrice')}</span>
                       </div>
-                      <div dangerouslySetInnerHTML={{ __html: description }} />
-                      <Link className="mt-4 inline-block" href={`/signup/${id}`}>
-                        <Button>{t('select')}</Button>
-                      </Link>
+                      <div dangerouslySetInnerHTML={{ __html: item?.description }} />
+                      <Button
+                        onClick={() => {
+                          setSelectedPlan(item);
+                          nextStep();
+                        }}
+                        className="mt-4"
+                      >
+                        {t('select')}
+                      </Button>
                     </div>
                   ))
                 ) : (
@@ -205,7 +232,126 @@ export default function Subscription() {
             </div>
           </div>
         </Stepper.Step>
-        <Stepper.Step label="Check out">Step 3 content: Get full access</Stepper.Step>
+        <Stepper.Step label="Check out">
+          <div className="grid gap-y-4 gap-x-8 lg:grid-cols-2">
+            <div className="col-span-full">
+              <h3 className="h5">{t('basicInfo')}</h3>
+            </div>
+            <div className="space-y-4">
+              <div className="space-y-4 bg-white p-4">
+                <div>
+                  <div className="text-xs">{t('name')}</div>
+                  <div className="text-xl font-semibold">
+                    {values.firstName} {values.lastName}
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-xs">{t('gender')}</div>
+                    <div>{t(values.gender)}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs">{t('dob')}</div>
+                    <div>{dayjs(values.dob).format('YYYY/MM/DD')}</div>
+                  </div>
+                </div>
+                {values?.email && (
+                  <div>
+                    <div className="text-xs">{t('email')}</div>
+                    <div>{t(values?.email)}</div>
+                  </div>
+                )}
+                <div>
+                  <div className="text-xs">{t('phone')}</div>
+                  <div>
+                    {values.phoneCountryCode} {values.phone}
+                  </div>
+                </div>
+              </div>
+              <h3 className="h5">{t('selectedPlan')}</h3>
+              <div className="flex justify-between space-y-4 bg-white p-4">
+                <div>
+                  <h3>{selectedPlan?.name}</h3>
+                  <div>
+                    {selectedPlan?.tags.map(({ name }, index) => (
+                      <Badge className="mr-2 mb-2" key={index}>
+                        {name}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-red-500">{planData?.totalAmount}円</h3>
+                </div>
+              </div>
+              <PaymentForm />
+            </div>
+            <div>
+              {planData ? (
+                <div className="rounded-xl bg-white p-4 shadow">
+                  <h4 className="font-semibold">{t('orderSummary')}</h4>
+                  <div className="flex justify-between">
+                    <div>{t('initialSetupFee')}:</div>
+                    <div>{planData.initialAdmissionFee}円</div>
+                  </div>
+                  <div className="flex justify-between">
+                    <div>{t('handlingFee')}:</div>
+                    <div>{planData.initialAdminFee}円</div>
+                  </div>
+                  <div className="flex justify-between">
+                    <div>{t('monthlyFee')}:</div>
+                    <div>{planData.monthlyFeeRemaining}円</div>
+                  </div>
+                  {couponData && (
+                    <div className="flex justify-between">
+                      <div>
+                        {t('discount')}
+                        {couponData?.discountType === 'PERCENTAGE' && `(${couponData?.discountValue}%)`}:
+                      </div>
+                      <div>
+                        -
+                        {couponData?.discountType === 'PERCENTAGE'
+                          ? Math.round((couponData?.discountValue / 100) * planData.totalAmount)
+                          : couponData.discountValue}
+                        円
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex justify-between">
+                    <div>{t('VAT')}:</div>
+                    <div>-</div>
+                  </div>
+                  {!rule && (
+                    <>
+                      <div className="mt-2 flex space-x-2">
+                        <TextInput
+                          className="flex-1"
+                          placeholder={t('couponPlaceholder')}
+                          onChange={({ currentTarget }) => setTempCouponCode(currentTarget.value)}
+                        />
+                        <Button type="button" size="sm" onClick={() => setCouponCode(tempCouponCode)}>
+                          {t('submitCoupon')}
+                        </Button>
+                      </div>
+                    </>
+                  )}
+                  <div className="mt-4 mb-4 flex justify-between border-t border-gray-300 pt-4 text-xl font-semibold">
+                    <div>{t('total')}:</div>
+                    <div>
+                      {planData.totalAmount -
+                        (couponData?.discountType === 'PERCENTAGE'
+                          ? Math.round((couponData?.discountValue / 100) * planData.totalAmount)
+                          : couponData?.discountValue || 0)}
+                      円
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <Skeleton />
+              )}
+            </div>
+          </div>
+        </Stepper.Step>
       </Stepper>
     </div>
   );
