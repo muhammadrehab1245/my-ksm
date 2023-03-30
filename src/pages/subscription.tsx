@@ -59,6 +59,8 @@ export default function Subscription() {
       phone: '',
       phoneCountryCode: '+81',
       zipCode: '',
+      prefecture: '',
+      municipality: '',
       address: '',
     },
     validate: yupResolver(schema),
