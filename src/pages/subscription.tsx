@@ -123,7 +123,7 @@ export default function Subscription() {
   return (
     <div className="container my-12">
       <Stepper active={active} onStepClick={setActive} allowNextStepsSelect={false} breakpoint="sm">
-        <Stepper.Step label="Basic information">
+        <Stepper.Step label={t('basicInformation')}>
           <form className="my-8" onSubmit={onSubmit}>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
@@ -184,11 +184,13 @@ export default function Subscription() {
               )}
               <TextInput withAsterisk label={t('municipality')} {...register('municipality')} />
               <TextInput withAsterisk label={t('address')} placeholder={t('addressPlaceholder')} {...register('address')} />
-              <Button type="submit">Next step</Button>
+              <Button fullWidth type="submit">
+                {t('next')}
+              </Button>
             </div>
           </form>
         </Stepper.Step>
-        <Stepper.Step label="Select plan">
+        <Stepper.Step label={t('selectPlan')}>
           <div className="mb-8 ml-[50%] flex w-[100vw] -translate-x-[50vw] flex-col bg-gray-100">
             <div className="flex-1">
               <div className="relative">
@@ -200,7 +202,7 @@ export default function Subscription() {
                   </div>
                 </div>
               </div>
-              <div className="relative z-10 mx-auto -mt-8 grid max-w-[1400px] gap-4 px-8 lg:grid-cols-2 xl:grid-cols-4">
+              <div className="relative z-10 mx-auto -mt-8 grid max-w-[1000px] gap-4 px-8 lg:grid-cols-2 xl:grid-cols-3">
                 {data ? (
                   data.map((item, index) => (
                     <div className="space-y-2 rounded-xl bg-white p-8 text-center" key={index}>
@@ -239,7 +241,7 @@ export default function Subscription() {
             </div>
           </div>
         </Stepper.Step>
-        <Stepper.Step label="Check out">
+        <Stepper.Step label={t('checkOut')}>
           <div className="grid gap-y-4 gap-x-8 lg:grid-cols-2">
             <div className="col-span-full">
               <h3 className="h5">{t('basicInfo')}</h3>
