@@ -1,4 +1,4 @@
-import type { Country, Coupon, iError, MemberFeeDetail, Plans, ZipCode } from '@/types';
+import type { Country, Coupon, MemberFeeDetail, Plans, ZipCode } from '@/types';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import queryString from 'query-string';
@@ -58,10 +58,10 @@ export function useSearchZipcode(zipCode: string) {
   };
 }
 
-export function useMemberCalculateFeeDetail(planId: string, email: string, params?: object) {
+export function useMemberCalculateFeeDetail(planId?: string, email?: string, params?: object) {
   const key = useKey(`/members/calculate-fee-details`, { planId, email, ...params });
 
-  const { data, error } = useSWR<MemberFeeDetail>(key, fetcher, { onErrorRetry });
+  const { data, error } = useSWR<MemberFeeDetail>(key, planId ? fetcher : null, { onErrorRetry });
 
   return {
     key,
@@ -97,8 +97,8 @@ export function useCoupon(params?: any) {
   };
 }
 
-export function usePlans(params = { sortBy: 'code', sortDir: 'asc' }) {
-  const key = useKey('/organizations/public/plans', params);
+export function usePlans(params?: any) {
+  const key = useKey('/organizations/public/plans', { ...params, sortBy: 'code', sortDir: 'asc' });
 
   const { data, error } = useSWR<Plans>(key, fetcher, { onErrorRetry });
 
