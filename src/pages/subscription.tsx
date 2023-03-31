@@ -112,7 +112,7 @@ export default function Subscription() {
 
   const { data: planData } = useMemberCalculateFeeDetail(selectedPlan?.id, values.email);
   const { data: rule, isLoading } = useDetectRule({ planId: selectedPlan, amount: planData?.totalAmount });
-  const { data: coupon } = useCoupon({ planId: selectedPlan, amount: planData?.totalAmount, couponCode, quantity: 1 });
+  const { data: coupon } = useCoupon({ planId: selectedPlan?.id, amount: planData?.totalAmount, couponCode, quantity: 1 });
 
   useEffect(() => {
     if (rule) {
