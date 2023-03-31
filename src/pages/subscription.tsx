@@ -128,10 +128,10 @@ export default function Subscription() {
   }, [rule, coupon]);
 
   return (
-    <div className="container my-12">
-      <Stepper active={active} onStepClick={setActive} allowNextStepsSelect={false} breakpoint="sm">
+    <div className="my-12">
+      <Stepper active={active} onStepClick={setActive} allowNextStepsSelect={false} breakpoint="sm" classNames={{ steps: 'container' }}>
         <Stepper.Step label={t('basicInformation')}>
-          <form className="my-8" onSubmit={onSubmit}>
+          <form className="container my-8" onSubmit={onSubmit}>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h3>{t('basicInfo')}</h3>
@@ -192,7 +192,7 @@ export default function Subscription() {
           </form>
         </Stepper.Step>
         <Stepper.Step label={t('selectPlan')}>
-          <div className="mb-8 ml-[50%] flex w-[100vw] -translate-x-[50vw] flex-col bg-gray-100">
+          <div className="mb-8 flex-col bg-gray-100">
             <div className="flex-1">
               <div className="relative">
                 <img className="h-72 w-full object-cover" src={'/images/banner.jpg'} alt="banner" />
@@ -203,7 +203,7 @@ export default function Subscription() {
                   </div>
                 </div>
               </div>
-              <div className="relative z-10 mx-auto -mt-8 grid max-w-[1000px] gap-4 px-8 lg:grid-cols-2 xl:grid-cols-3">
+              <div className="container relative z-10 -mt-8 grid gap-4 px-8 lg:grid-cols-2 xl:grid-cols-3">
                 {data ? (
                   data.map((item, index) => (
                     <div className="space-y-2 rounded-xl bg-white p-8 text-center" key={index}>
@@ -243,7 +243,7 @@ export default function Subscription() {
           </div>
         </Stepper.Step>
         <Stepper.Step label={t('checkOut')}>
-          <div className="grid gap-y-4 gap-x-8 lg:grid-cols-2">
+          <div className="container grid gap-y-4 gap-x-8 lg:grid-cols-2">
             <div className="col-span-full">
               <h3 className="h5">{t('basicInfo')}</h3>
             </div>
