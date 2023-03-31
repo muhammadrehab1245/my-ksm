@@ -39,7 +39,6 @@ export default function Subscription() {
     nationality: string().required(t('required')),
     phone: string().required(t('required')),
     zipCode: string().required(t('required')),
-    municipality: string().required(t('required')),
     address: string().required(t('required')),
   });
 
@@ -66,23 +65,30 @@ export default function Subscription() {
     validate: yupResolver(schema),
   });
   const onSubmit = handleSubmit((values) => {
-    const data = { firstName: values.firstName, lastName: values.lastName, dob: dayjs(values.dob).format('YYYY-MM-DD') };
     if (values?.email) {
       http('/auth/email-available', { params: { email: values.email } }).then(({ data }) => {
         if (data?.available === false) {
           toast.error(t('emailExist'));
         } else {
-          http.post('/members/member-type/search', data).then(({ data }) => {
-            setMemberType(data?.memberType);
-            nextStep();
-          });
+          http
+            .post('/members/member-type/search', {
+              firstName: values.firstName,
+              lastName: values.lastName,
+              dob: dayjs(values.dob).format('YYYY-MM-DD'),
+            })
+            .then(({ data }) => {
+              setMemberType(data?.memberType);
+              nextStep();
+            });
         }
       });
     } else {
-      http.post('/members/member-type/search', data).then(({ data }) => {
-        setMemberType(data?.memberType);
-        nextStep();
-      });
+      http
+        .post('/members/member-type/search', { firstName: values.firstName, lastName: values.lastName, dob: dayjs(values.dob).format('YYYY-MM-DD') })
+        .then(({ data }) => {
+          setMemberType(data?.memberType);
+          nextStep();
+        });
     }
   });
 
@@ -173,16 +179,9 @@ export default function Subscription() {
                 </div>
               </Input.Wrapper>
               {prefectures && (
-                <Select
-                  searchable
-                  withAsterisk
-                  label={t('prefecture')}
-                  placeholder={t('selectPlaceholder')}
-                  data={prefectures}
-                  {...register('prefecture')}
-                />
+                <Select searchable label={t('prefecture')} placeholder={t('selectPlaceholder')} data={prefectures} {...register('prefecture')} />
               )}
-              <TextInput withAsterisk label={t('municipality')} {...register('municipality')} />
+              <TextInput label={t('municipality')} {...register('municipality')} />
               <TextInput withAsterisk label={t('address')} placeholder={t('addressPlaceholder')} {...register('address')} />
               <Button fullWidth type="submit">
                 {t('next')}
