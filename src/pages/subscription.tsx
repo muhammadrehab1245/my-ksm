@@ -13,6 +13,7 @@ import { useCountries, useCoupon, useDetectRule, useMemberCalculateFeeDetail, us
 import { countryCodes, http } from '@/utilities';
 import { PaymentForm, Skeleton } from '@/components';
 import { FiCalendar } from 'react-icons/fi';
+import 'dayjs/locale/ja';
 
 export default function Subscription() {
   const { t } = useTranslation();
@@ -149,6 +150,7 @@ export default function Subscription() {
               <DatePicker
                 withAsterisk
                 inputFormat="YYYY/MM/DD"
+                labelFormat="YYYY/MM"
                 label={t('dob')}
                 placeholder={t('datePlaceholder')}
                 locale="ja"
