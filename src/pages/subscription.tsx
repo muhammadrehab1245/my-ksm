@@ -169,7 +169,7 @@ export default function Subscription() {
               />
               <div className="flex gap-4">
                 <Select searchable withAsterisk label={t('phoneCountryCode')} data={countryCodes} {...register('phoneCountryCode')} />
-                <TextInput className="flex-1" withAsterisk label={t('phone')} placeholder={t('phone')} {...register('phone')} />
+                <TextInput type="number" className="flex-1" withAsterisk label={t('phone')} placeholder={t('phone')} {...register('phone')} />
               </div>
               {countries && (
                 <Select
@@ -183,7 +183,7 @@ export default function Subscription() {
               )}
               <Input.Wrapper withAsterisk label={t('zipCode')}>
                 <div className="flex gap-2">
-                  <TextInput placeholder={t('zipCodePlaceholder')} {...register('zipCode')} />
+                  <TextInput type="number" placeholder={t('zipCodePlaceholder')} {...register('zipCode')} />
                   <Button size="sm" type="button" onClick={() => setZipSearch(Math.random())}>
                     {t('search')}
                   </Button>
