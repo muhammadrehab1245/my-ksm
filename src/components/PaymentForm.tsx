@@ -25,7 +25,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
     cardNumber: string().when('paymentMethod', { is: (pm: string) => pm === 'CARD', then: (schema) => schema.required(t('required')) }),
     expiryDate: string().when('paymentMethod', {
       is: (pm: string) => pm === 'CARD',
-      then: (schema) => schema.required(t('required')).min(5, t('required')),
+      then: (schema) => schema.required(t('required')).min(4, t('required')),
     }),
     cvv: string().when('paymentMethod', { is: (pm: string) => pm === 'CARD', then: (schema) => schema.required(t('required')) }),
     cardholderName: string().when('paymentMethod', { is: (pm: string) => pm === 'CARD', then: (schema) => schema.required(t('required')) }),
@@ -105,7 +105,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
       <Radio value="CARD" checked={values.paymentMethod === 'CARD'} label={t('creditCard')} onChange={register('paymentMethod').onChange} />
       {values.paymentMethod === 'CARD' && (
         <div className="ml-8 space-y-2">
-          <Input.Wrapper withAsterisk label={t('cardNumber')}>
+          <Input.Wrapper withAsterisk label={t('cardNumber')} error={register('cardNumber').error}>
             <IMaskInput
               className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
               mask="0000 0000 0000 0000"
@@ -115,7 +115,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
             />
           </Input.Wrapper>
           <div className="flex gap-2">
-            <Input.Wrapper withAsterisk label={t('expiryDate')}>
+            <Input.Wrapper withAsterisk label={t('expiryDate')} error={register('expiryDate').error}>
               <IMaskInput
                 className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
                 mask="m/y"
@@ -128,7 +128,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
                 placeholder={t('expiryDatePlaceholder')}
               />
             </Input.Wrapper>
-            <Input.Wrapper withAsterisk label={t('cvv')}>
+            <Input.Wrapper withAsterisk label={t('cvv')} error={register('cvv').error}>
               <IMaskInput
                 className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
                 mask={Number}
