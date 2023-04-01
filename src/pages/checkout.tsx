@@ -36,8 +36,10 @@ export default function Checkout() {
       toast.success(t('couponApplied'));
     } else if (coupon?.error) {
       toast.error(coupon?.stack);
+      setCouponCode('');
     } else {
       setCouponData(null);
+      setCouponCode('');
     }
   }, [rule, coupon]);
 
