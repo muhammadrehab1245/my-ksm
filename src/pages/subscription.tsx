@@ -127,6 +127,15 @@ export default function Subscription() {
     }
   }, [rule, coupon]);
 
+  let discount: number;
+  if (couponData?.discountType === 'PERCENTAGE') {
+    discount = Math.round((couponData?.discountValue / 100) * planData?.totalAmount);
+  } else {
+    discount = couponData?.discountValue || 0;
+  }
+
+  let total = planData?.totalAmount - discount;
+
   return (
     <div className="my-12">
       <Stepper active={active} onStepClick={setActive} allowNextStepsSelect={false} breakpoint="sm" classNames={{ steps: 'container' }}>
@@ -300,9 +309,6 @@ export default function Subscription() {
                     ))}
                   </div>
                 </div>
-                <div>
-                  <h3 className="text-red-500">{planData?.totalAmount}円</h3>
-                </div>
               </div>
               <PaymentForm info={values} planId={selectedPlan?.id} couponCode={couponCode} />
             </div>
@@ -357,13 +363,7 @@ export default function Subscription() {
                   )}
                   <div className="mt-4 mb-4 flex justify-between border-t border-gray-300 pt-4 text-xl font-semibold">
                     <div>{t('total')}:</div>
-                    <div>
-                      {planData.totalAmount -
-                        (couponData?.discountType === 'PERCENTAGE'
-                          ? Math.round((couponData?.discountValue / 100) * planData.totalAmount)
-                          : couponData?.discountValue || 0)}
-                      円
-                    </div>
+                    <div className="text-red-500">{total > 0 ? total : 0}円</div>
                   </div>
                 </div>
               ) : (
