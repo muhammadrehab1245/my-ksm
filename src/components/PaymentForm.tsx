@@ -1,8 +1,8 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import clsx from 'clsx';
-import IMask, { MaskedRange } from 'imask';
+import { MaskedRange } from 'imask';
 import toast from 'react-hot-toast';
 import { object, string } from 'yup';
 import { IMaskInput } from 'react-imask';
@@ -19,19 +19,6 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
   const { information, selectedPlan } = store;
 
   const [opened, { toggle }] = useDisclosure(false);
-
-  const expiryDate = useRef(null);
-
-  useEffect(() => {
-    // @ts-ignore
-    IMask(expiryDate.current, {
-      mask: 'm/y',
-      blocks: {
-        m: { mask: MaskedRange, from: 1, to: 12 },
-        y: { mask: MaskedRange, from: 10, to: 99 },
-      },
-    });
-  }, []);
 
   const schema = object({
     paymentMethod: string().required(t('required')),
@@ -128,7 +115,19 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
             />
           </Input.Wrapper>
           <div className="flex gap-2">
-            <TextInput ref={expiryDate} withAsterisk label={t('expiryDate')} placeholder={t('expiryDatePlaceholder')} {...register('expiryDate')} />
+            <Input.Wrapper withAsterisk label={t('expiryDate')}>
+              <IMaskInput
+                className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
+                mask="m/y"
+                blocks={{
+                  m: { mask: MaskedRange, from: 1, to: 12 },
+                  y: { mask: MaskedRange, from: 10, to: 99 },
+                }}
+                unmask={true}
+                onAccept={(value, mask) => setFieldValue('expiryDate', value)}
+                placeholder={t('expiryDatePlaceholder')}
+              />
+            </Input.Wrapper>
             <Input.Wrapper withAsterisk label={t('cvv')}>
               <IMaskInput
                 className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
