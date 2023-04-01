@@ -71,7 +71,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
 
     const data = {
       ...information,
-      planId: selectedPlan.id,
+      planId: selectedPlan?.id,
       paymentMethod,
       couponCode,
       orgId: process.env.NEXT_PUBLIC_HOTUS_ORG_ID,
