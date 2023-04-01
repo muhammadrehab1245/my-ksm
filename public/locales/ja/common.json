@@ -11,6 +11,7 @@
   "afterPrice": "(税込)/月",
   "select": "このプランを選択する",
   "discount": "割引",
+  "autoDiscount": "自動割引",
   "couponPlaceholder": "クーポンを入力してください",
   "submitCoupon": "適用",
   "couponApplied": "クーポン適用",
