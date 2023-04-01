@@ -330,7 +330,10 @@ export default function Subscription() {
                   </div>
                   {couponData && (
                     <div className="flex justify-between">
-                      <div>{couponData?.ruleType === 'AUTO' ? t('autoDiscount') : t('discount')}</div>
+                      <div>
+                        {couponData?.ruleType === 'AUTO' ? t('autoDiscount') : t('couponDiscount')}
+                        {couponData?.discountType === 'PERCENTAGE' && `(${couponData?.discountValue}%)`}:
+                      </div>
                       <div>
                         -
                         {couponData?.discountType === 'PERCENTAGE'
