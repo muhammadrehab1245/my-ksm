@@ -2,12 +2,13 @@ import { FC, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import clsx from 'clsx';
-import iMask, { MaskedRange } from 'imask';
+import IMask, { MaskedRange } from 'imask';
 import toast from 'react-hot-toast';
 import { object, string } from 'yup';
+import { IMaskInput } from 'react-imask';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm, yupResolver } from '@mantine/form';
-import { Alert, Button, Modal, Radio, TextInput } from '@mantine/core';
+import { Alert, Button, Input, Modal, Radio, TextInput } from '@mantine/core';
 import { http, store } from '@/utilities';
 import { FiCheckCircle, FiChevronRight } from 'react-icons/fi';
 import TermsAndConditions from '@/pages/hotus/terms-and-conditions';
@@ -19,17 +20,11 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
 
   const [opened, { toggle }] = useDisclosure(false);
 
-  const cardNumber = useRef(null);
-  const cvv = useRef(null);
   const expiryDate = useRef(null);
 
   useEffect(() => {
     // @ts-ignore
-    iMask(cardNumber.current, { mask: '0000 0000 0000 0000' });
-    // @ts-ignore
-    iMask(cvv.current, { mask: Number, min: 0, max: 9999 });
-    // @ts-ignore
-    iMask(expiryDate.current, {
+    IMask(expiryDate.current, {
       mask: 'm/y',
       blocks: {
         m: { mask: MaskedRange, from: 1, to: 12 },
@@ -85,7 +80,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
       // @ts-ignore
       window.Multipayment.getToken(
         {
-          cardno: cardNumber.replaceAll(' ', ''),
+          cardno: cardNumber,
           expire: `20${expire[1]}${expire[0]}`,
           securitycode: cvv,
           holdername: cardholderName,
@@ -123,10 +118,28 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
       <Radio value="CARD" checked={values.paymentMethod === 'CARD'} label={t('creditCard')} onChange={register('paymentMethod').onChange} />
       {values.paymentMethod === 'CARD' && (
         <div className="ml-8 space-y-2">
-          <TextInput ref={cardNumber} withAsterisk label={t('cardNumber')} placeholder={t('cardNumberPlaceholder')} {...register('cardNumber')} />
+          <Input.Wrapper withAsterisk label={t('cardNumber')}>
+            <IMaskInput
+              className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
+              mask="0000 0000 0000 0000"
+              unmask={true}
+              onAccept={(value, mask) => setFieldValue('cardNumber', value)}
+              placeholder={t('cardNumberPlaceholder')}
+            />
+          </Input.Wrapper>
           <div className="flex gap-2">
             <TextInput ref={expiryDate} withAsterisk label={t('expiryDate')} placeholder={t('expiryDatePlaceholder')} {...register('expiryDate')} />
-            <TextInput ref={cvv} withAsterisk label={t('cvv')} placeholder={t('cvvPlaceholder')} {...register('cvv')} />
+            <Input.Wrapper withAsterisk label={t('cvv')}>
+              <IMaskInput
+                className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
+                mask={Number}
+                min={0}
+                max={9999}
+                unmask={true}
+                onAccept={(value, mask) => setFieldValue('cvv', value)}
+                placeholder={t('cvvPlaceholder')}
+              />
+            </Input.Wrapper>
           </div>
           <TextInput withAsterisk label={t('cardholderName')} placeholder={t('cardholderNamePlaceholder')} {...register('cardholderName')} />
         </div>
