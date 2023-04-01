@@ -81,9 +81,9 @@ export default function Success() {
           <Button>{t('send')}</Button>
         </div>
       </Modal>
-      <Button className="my-4" fullWidth onClick={open}>
+      {/*<Button className="my-4" fullWidth onClick={open}>
         {t('sendTheRegistrationInfoToEmail')}
-      </Button>
+      </Button>*/}
       <Link href="/subscription">
         <Button variant="outline" fullWidth className="my-4">
           {t('goBackToMainPage')}
