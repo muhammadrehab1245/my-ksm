@@ -51,6 +51,11 @@ export interface ZipCode {
   town: string;
 }
 
+export interface CouponError {
+  error: string;
+  stack: string;
+}
+
 export interface Coupon {
   id: string;
   orgId: string;
@@ -109,6 +114,20 @@ export interface Plans extends General {
   content: Plan[];
 }
 
+export interface Information {
+  email: string;
+  firstName: string;
+  lastName: string;
+  nationality: string;
+  gender: string;
+  dob: string;
+  phone: string;
+  phoneCountryCode: string;
+  zipCode: string;
+  prefecture: string;
+  municipality: string;
+  address: string;
+}
 export interface MemberDetail {
   user: {
     id: string;

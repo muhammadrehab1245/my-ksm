@@ -19,7 +19,7 @@ export default function Home() {
             </div>
             <h1 className="h3">{t('welcomeToHotus')}</h1>
             <div className="text-gray-500">{t('welcomeDescription')}</div>
-            <Link className="block" href="/subscription">
+            <Link className="block" href="/information">
               <Button fullWidth>{t('register')}</Button>
             </Link>
           </div>

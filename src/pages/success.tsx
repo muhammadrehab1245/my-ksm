@@ -84,7 +84,7 @@ export default function Success() {
       {/*<Button className="my-4" fullWidth onClick={open}>
         {t('sendTheRegistrationInfoToEmail')}
       </Button>*/}
-      <Link href="/subscription">
+      <Link href="/information">
         <Button variant="outline" fullWidth className="my-4">
           {t('goBackToMainPage')}
         </Button>

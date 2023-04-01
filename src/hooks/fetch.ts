@@ -46,10 +46,10 @@ export function usePrefectures() {
   };
 }
 
-export function useSearchZipcode(zipCode: string) {
+export function useSearchZipcode(zipCode?: string) {
   const key = useKey('/address/public/search', { zipCode });
 
-  const { data, error } = useSWR<ZipCode>(key, fetcher, { onErrorRetry });
+  const { data, error } = useSWR<ZipCode>(key, zipCode ? fetcher : null, { onErrorRetry });
 
   return {
     data,
