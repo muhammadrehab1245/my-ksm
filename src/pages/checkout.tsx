@@ -66,17 +66,17 @@ export default function Checkout() {
             <div>
               <div className="text-xs">{t('name')}</div>
               <div className="text-xl font-semibold">
-                {information.firstName} {information.lastName}
+                {information?.firstName} {information?.lastName}
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <div className="text-xs">{t('gender')}</div>
-                <div>{t(information.gender)}</div>
+                <div>{t(information?.gender)}</div>
               </div>
               <div>
                 <div className="text-xs">{t('dob')}</div>
-                <div>{dayjs(information.dob).format('YYYY/MM/DD')}</div>
+                <div>{dayjs(information?.dob).format('YYYY/MM/DD')}</div>
               </div>
             </div>
             {information?.email && (
@@ -88,7 +88,7 @@ export default function Checkout() {
             <div>
               <div className="text-xs">{t('phone')}</div>
               <div>
-                {information.phoneCountryCode} {information.phone}
+                {information?.phoneCountryCode} {information?.phone}
               </div>
             </div>
             <div>
