@@ -304,7 +304,7 @@ export default function Subscription() {
                   <h3 className="text-red-500">{planData?.totalAmount}円</h3>
                 </div>
               </div>
-              <PaymentForm info={values} planId={selectedPlan?.id} />
+              <PaymentForm info={values} planId={selectedPlan?.id} couponCode={couponCode} />
             </div>
             <div>
               {planData ? (

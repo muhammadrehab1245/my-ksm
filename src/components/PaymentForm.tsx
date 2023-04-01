@@ -12,7 +12,7 @@ import { http, store } from '@/utilities';
 import { FiCheckCircle, FiChevronRight } from 'react-icons/fi';
 import TermsAndConditions from '@/pages/hotus/terms-and-conditions';
 
-export const PaymentForm: FC<{ info: any; planId?: string }> = ({ info, planId }) => {
+export const PaymentForm: FC<{ info: any; planId?: string; couponCode?: string }> = ({ info, planId, couponCode }) => {
   const { t } = useTranslation();
   const { push } = useRouter();
 
@@ -72,6 +72,7 @@ export const PaymentForm: FC<{ info: any; planId?: string }> = ({ info, planId }
       ...info,
       planId,
       paymentMethod,
+      couponCode,
       orgId: process.env.NEXT_PUBLIC_HOTUS_ORG_ID,
     };
 
