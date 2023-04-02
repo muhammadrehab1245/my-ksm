@@ -127,7 +127,7 @@ export default function Information() {
                 className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
                 mask="00000000000"
                 unmask={true}
-                onAccept={(value, mask) => setFieldValue('phone', value)}
+                onAccept={(value: any) => setFieldValue('phone', value)}
                 placeholder={t('phone')}
               />
             </Input.Wrapper>
@@ -148,7 +148,7 @@ export default function Information() {
                 className="mantine-Input-input mantine-TextInput-input mantine-1j89rho w-48"
                 mask="0000000"
                 unmask={true}
-                onAccept={(value, mask) => setFieldValue('zipCode', value)}
+                onAccept={(value: any) => setFieldValue('zipCode', value)}
                 placeholder={t('zipCodePlaceholder')}
               />
               <Button size="sm" type="button" onClick={() => setZipSearch(Math.random())}>

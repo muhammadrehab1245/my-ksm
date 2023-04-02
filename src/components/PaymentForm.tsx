@@ -112,7 +112,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
               className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
               mask="0000 0000 0000 0000"
               unmask={true}
-              onAccept={(value, mask) => setFieldValue('cardNumber', value)}
+              onAccept={(value: any) => setFieldValue('cardNumber', value)}
               placeholder={t('cardNumberPlaceholder')}
             />
           </Input.Wrapper>
@@ -126,7 +126,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
                   y: { mask: MaskedRange, from: 10, to: 99 },
                 }}
                 unmask={true}
-                onAccept={(value, mask) => setFieldValue('expiryDate', value)}
+                onAccept={(value: any) => setFieldValue('expiryDate', value)}
                 placeholder={t('expiryDatePlaceholder')}
               />
             </Input.Wrapper>
@@ -137,7 +137,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
                 min={0}
                 max={9999}
                 unmask={true}
-                onAccept={(value, mask) => setFieldValue('cvv', value)}
+                onAccept={(value: any) => setFieldValue('cvv', value)}
                 placeholder={t('cvvPlaceholder')}
               />
             </Input.Wrapper>
