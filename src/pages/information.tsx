@@ -30,9 +30,15 @@ export default function Information() {
     gender: string().required(t('required')),
     dob: date().required(t('required')),
     nationality: string().required(t('required')),
-    phone: string().required(t('required')),
-    zipCode: string().required(t('required')),
-    address: string().required(t('required')),
+    phone: string().min(1, t('required')).required(t('required')),
+    zipCode: string().when('nationality', {
+      is: (nationality: string) => nationality === 'JP',
+      then: (schema) => schema.required(t('required')),
+    }),
+    address: string().when('nationality', {
+      is: (nationality: string) => nationality === 'JP',
+      then: (schema) => schema.required(t('required')),
+    }),
   });
 
   const {
@@ -142,25 +148,29 @@ export default function Information() {
               {...register('nationality')}
             />
           )}
-          <Input.Wrapper withAsterisk label={t('zipCode')} error={register('zipCode').error}>
-            <div className="flex gap-2">
-              <IMaskInput
-                className="mantine-Input-input mantine-TextInput-input mantine-1j89rho w-48"
-                mask="0000000"
-                unmask={true}
-                onAccept={(value: any) => setFieldValue('zipCode', value)}
-                placeholder={t('zipCodePlaceholder')}
-              />
-              <Button size="sm" type="button" onClick={() => setZipSearch(Math.random())}>
-                {t('search')}
-              </Button>
-            </div>
-          </Input.Wrapper>
-          {prefectures && (
-            <Select searchable label={t('prefecture')} placeholder={t('selectPlaceholder')} data={prefectures} {...register('prefecture')} />
+          {values.nationality === 'JP' && (
+            <>
+              <Input.Wrapper withAsterisk label={t('zipCode')} error={register('zipCode').error}>
+                <div className="flex gap-2">
+                  <IMaskInput
+                    className="mantine-Input-input mantine-TextInput-input mantine-1j89rho w-48"
+                    mask="0000000"
+                    unmask={true}
+                    onAccept={(value: any) => setFieldValue('zipCode', value)}
+                    placeholder={t('zipCodePlaceholder')}
+                  />
+                  <Button size="sm" type="button" onClick={() => setZipSearch(Math.random())}>
+                    {t('search')}
+                  </Button>
+                </div>
+              </Input.Wrapper>
+              {prefectures && (
+                <Select searchable label={t('prefecture')} placeholder={t('selectPlaceholder')} data={prefectures} {...register('prefecture')} />
+              )}
+              <TextInput label={t('municipality')} {...register('municipality')} />
+              <TextInput withAsterisk label={t('address')} placeholder={t('addressPlaceholder')} {...register('address')} />
+            </>
           )}
-          <TextInput label={t('municipality')} {...register('municipality')} />
-          <TextInput withAsterisk label={t('address')} placeholder={t('addressPlaceholder')} {...register('address')} />
           <Button fullWidth type="submit">
             {t('next')}
           </Button>
