@@ -80,6 +80,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
                 toast.success(t('successfullyRegistered'));
                 store.userInfo = data;
                 store.information = {};
+                store.memberType = '';
                 push('/success');
               })
               .catch((error) => toast.error(error?.response?.data?.stack || error.message));
@@ -93,6 +94,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
           toast.success(t('successfullyRegistered'));
           store.userInfo = data;
           store.information = {};
+          store.memberType = '';
           push('/success');
         })
         .catch((error) => toast.error(error?.response?.data?.stack || error.message));
