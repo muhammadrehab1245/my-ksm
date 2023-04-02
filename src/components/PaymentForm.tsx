@@ -60,15 +60,13 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
     };
 
     if (paymentMethod === 'CARD') {
-      let expire = expiryDate.split('/');
-
       // @ts-ignore
       window.Multipayment.init(process.env.NEXT_PUBLIC_GMO_SHOP_ID);
       // @ts-ignore
       window.Multipayment.getToken(
         {
           cardno: cardNumber,
-          expire: `20${expire[1]}${expire[0]}`,
+          expire: `20${expiryDate.substring(0, 2)}${expiryDate.substring(2)}`,
           securitycode: cvv,
           holdername: cardholderName,
         },
@@ -81,6 +79,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
               .then(({ data }) => {
                 toast.success(t('successfullyRegistered'));
                 store.userInfo = data;
+                store.information = {};
                 push('/success');
               })
               .catch((error) => toast.error(error?.response?.data?.stack || error.message));
@@ -93,6 +92,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
         .then(({ data }) => {
           toast.success(t('successfullyRegistered'));
           store.userInfo = data;
+          store.information = {};
           push('/success');
         })
         .catch((error) => toast.error(error?.response?.data?.stack || error.message));
