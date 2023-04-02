@@ -6,6 +6,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
+import { IMaskInput } from 'react-imask';
 import { date, object, string } from 'yup';
 import { DatePicker } from '@mantine/dates';
 import { useForm, yupResolver } from '@mantine/form';
@@ -14,7 +15,6 @@ import { useCountries, usePrefectures, useSearchZipcode } from '@/hooks/fetch';
 import { countryCodes, http, store } from '@/utilities';
 import { FiCalendar } from 'react-icons/fi';
 import 'dayjs/locale/ja';
-import { IMaskInput } from 'react-imask';
 
 export default function Information() {
   const { t } = useTranslation();
