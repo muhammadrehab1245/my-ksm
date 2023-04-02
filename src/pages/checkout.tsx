@@ -97,12 +97,14 @@ export default function Checkout() {
               <div className="text-xs">{t('nationality')}</div>
               <div>{nationality}</div>
             </div>
-            <div>
-              <div className="text-xs">{t('address')}</div>
+            {information?.nationality === 'JP' && (
               <div>
-                {information?.zipCode} {information?.prefecture} {information?.municipality} {information?.address}
+                <div className="text-xs">{t('address')}</div>
+                <div>
+                  {information?.zipCode} {information?.prefecture} {information?.municipality} {information?.address}
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <h3 className="h5">{t('selectedPlan')}</h3>
           <div className="flex justify-between space-y-4 bg-white p-4">
