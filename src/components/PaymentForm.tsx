@@ -193,7 +193,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
           <IMaskInput
             // @ts-ignore
             className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
-            mask={/^[A-Za-z]+$/}
+            mask={/^[A-Za-z ]+$/}
             unmask={true}
             onAccept={(value: any) => setFieldValue('cardholderName', value)}
             placeholder={t('cardholderNamePlaceholder')}
