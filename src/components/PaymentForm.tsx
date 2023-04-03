@@ -60,6 +60,12 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
     };
 
     if (paymentMethod === 'CARD') {
+      console.log({
+        cardno: cardNumber,
+        expire: `20${expiryDate.substring(0, 2)}${expiryDate.substring(2)}`,
+        securitycode: cvv,
+        holdername: cardholderName,
+      });
       // @ts-ignore
       window.Multipayment.init(process.env.NEXT_PUBLIC_GMO_SHOP_ID);
       // @ts-ignore
