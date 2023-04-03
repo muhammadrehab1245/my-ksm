@@ -133,6 +133,7 @@ export default function Information() {
                 // @ts-ignore
                 className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
                 mask="00000000000"
+                value={values.phone}
                 unmask={true}
                 onAccept={(value: any) => setFieldValue('phone', value)}
                 placeholder={t('phone')}
@@ -157,6 +158,7 @@ export default function Information() {
                     // @ts-ignore
                     className="mantine-Input-input mantine-TextInput-input mantine-1j89rho w-48"
                     mask="0000000"
+                    value={values.zipCode}
                     unmask={true}
                     onAccept={(value: any) => setFieldValue('zipCode', value)}
                     placeholder={t('zipCodePlaceholder')}

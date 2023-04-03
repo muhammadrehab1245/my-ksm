@@ -58,12 +58,14 @@ export default function Success() {
               <div className="text-xs">{t('nationality')}</div>
               <div>{nationality}</div>
             </div>
-            <div>
-              <div className="text-xs">{t('address')}</div>
+            {userInfo?.user?.nationality === 'JP' && (
               <div>
-                {userInfo?.user?.zipCode} {userInfo?.user?.prefecture} {userInfo?.user?.municipality} {userInfo?.user?.address}
+                <div className="text-xs">{t('address')}</div>
+                <div>
+                  {userInfo?.user?.zipCode} {userInfo?.user?.prefecture} {userInfo?.user?.municipality} {userInfo?.user?.address}
+                </div>
               </div>
-            </div>
+            )}
             <div>
               <div className="text-xs">{t('paymentMethod')}</div>
               <div>{userInfo?.user?.cardRegistered ? t('CARD') : t('TRANSFER')}</div>
