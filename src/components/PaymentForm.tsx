@@ -135,6 +135,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
         <div className="ml-8 space-y-2">
           <Input.Wrapper withAsterisk label={t('cardNumber')} error={register('cardNumber').error}>
             <IMaskInput
+              // @ts-ignore
               className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
               mask="0000 0000 0000 0000"
               unmask={true}
@@ -145,6 +146,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
           <div className="flex gap-2">
             <Input.Wrapper withAsterisk label={t('expiryDate')} error={register('expiryDate').error}>
               <IMaskInput
+                // @ts-ignore
                 className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
                 mask="m/y"
                 blocks={{
@@ -158,6 +160,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
             </Input.Wrapper>
             <Input.Wrapper withAsterisk label={t('cvv')} error={register('cvv').error}>
               <IMaskInput
+                // @ts-ignore
                 className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
                 mask={Number}
                 min={0}

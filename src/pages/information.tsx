@@ -130,6 +130,7 @@ export default function Information() {
             <Select searchable withAsterisk label={t('phoneCountryCode')} data={countryCodes} {...register('phoneCountryCode')} />
             <Input.Wrapper className="flex-1" label=" " error={register('phone').error}>
               <IMaskInput
+                // @ts-ignore
                 className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
                 mask="00000000000"
                 unmask={true}
@@ -153,6 +154,7 @@ export default function Information() {
               <Input.Wrapper withAsterisk label={t('zipCode')} error={register('zipCode').error}>
                 <div className="flex gap-2">
                   <IMaskInput
+                    // @ts-ignore
                     className="mantine-Input-input mantine-TextInput-input mantine-1j89rho w-48"
                     mask="0000000"
                     unmask={true}

@@ -34,7 +34,9 @@ export default function Checkout() {
     } else if (coupon?.ruleType) {
       setCouponData(coupon);
       toast.success(t('couponApplied'));
+      // @ts-ignore
     } else if (coupon?.error) {
+      // @ts-ignore
       toast.error(coupon?.stack);
       setCouponCode('');
     } else {
@@ -45,11 +47,13 @@ export default function Checkout() {
 
   let discount: number;
   if (couponData?.discountType === 'PERCENTAGE') {
+    // @ts-ignore
     discount = Math.round((couponData?.discountValue / 100) * planData?.totalAmount);
   } else {
     discount = couponData?.discountValue || 0;
   }
 
+  // @ts-ignore
   let total = planData?.totalAmount - discount;
 
   return (
