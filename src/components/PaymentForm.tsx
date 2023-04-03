@@ -85,7 +85,20 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
               .then(({ data }) => {
                 toast.success(t('successfullyRegistered'));
                 store.userInfo = data;
-                store.information = {};
+                store.information = {
+                  email: '',
+                  firstName: '',
+                  lastName: '',
+                  nationality: 'JP',
+                  gender: 'MALE',
+                  dob: undefined,
+                  phone: '',
+                  phoneCountryCode: '+81',
+                  zipCode: '',
+                  prefecture: '',
+                  municipality: '',
+                  address: '',
+                };
                 store.memberType = '';
                 push('/success');
               })
@@ -99,7 +112,20 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
         .then(({ data }) => {
           toast.success(t('successfullyRegistered'));
           store.userInfo = data;
-          store.information = {};
+          store.information = {
+            email: '',
+            firstName: '',
+            lastName: '',
+            nationality: 'JP',
+            gender: 'MALE',
+            dob: undefined,
+            phone: '',
+            phoneCountryCode: '+81',
+            zipCode: '',
+            prefecture: '',
+            municipality: '',
+            address: '',
+          };
           store.memberType = '';
           push('/success');
         })
