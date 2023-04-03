@@ -56,7 +56,7 @@
   "cardNumberPlaceholder": "",
   "expiryDate": "有効期限",
   "expiryDatePlaceholder": "",
-  "cvv": "セキュリティーコード（半角数字:CVV）",
+  "cvv": "セキュリティーコード（CVV）",
   "cvvPlaceholder": "",
   "cardholderName": "カード名義（クレシットカードと同じように記載してください）",
   "cardholderNamePlaceholder": "例：TARO KOSHIMIZU",
