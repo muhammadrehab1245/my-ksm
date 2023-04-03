@@ -8,22 +8,24 @@ type Store = {
   memberType: string;
   selectedPlan: Plan;
 };
+export const information = {
+  email: '',
+  firstName: '',
+  lastName: '',
+  nationality: 'JP',
+  gender: 'MALE',
+  dob: undefined,
+  phone: '',
+  phoneCountryCode: '+81',
+  zipCode: '',
+  prefecture: '',
+  municipality: '',
+  address: '',
+};
+
 export const store: Partial<Store> = proxy({
   memberType: '',
-  information: {
-    email: '',
-    firstName: '',
-    lastName: '',
-    nationality: 'JP',
-    gender: 'MALE',
-    dob: undefined,
-    phone: '',
-    phoneCountryCode: '+81',
-    zipCode: '',
-    prefecture: '',
-    municipality: '',
-    address: '',
-  },
+  information,
   selectedPlan: undefined,
   userInfo: undefined,
 });

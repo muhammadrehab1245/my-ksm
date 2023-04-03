@@ -76,6 +76,14 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
       orgId: process.env.NEXT_PUBLIC_HOTUS_ORG_ID,
     };
 
+    const onfulfilled = ({ data }: { data: any }) => {
+      toast.success(t('successfullyRegistered'));
+      store.userInfo = data;
+      store.information = information;
+      store.memberType = '';
+      push('/success').then(() => setLoading(false));
+    };
+
     if (paymentMethod === 'CARD') {
       // @ts-ignore
       window.Multipayment.init(process.env.NEXT_PUBLIC_GMO_SHOP_ID);
@@ -94,26 +102,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
             setLoading(true);
             http
               .post('/organizations/public/subscribe', { ...data, cardToken: tokenObject?.token })
-              .then(({ data }) => {
-                toast.success(t('successfullyRegistered'));
-                store.userInfo = data;
-                store.information = {
-                  email: '',
-                  firstName: '',
-                  lastName: '',
-                  nationality: 'JP',
-                  gender: 'MALE',
-                  dob: undefined,
-                  phone: '',
-                  phoneCountryCode: '+81',
-                  zipCode: '',
-                  prefecture: '',
-                  municipality: '',
-                  address: '',
-                };
-                store.memberType = '';
-                push('/success').then(() => setLoading(false));
-              })
+              .then(onfulfilled)
               .catch((error) => toast.error(error?.response?.data?.stack || error.message));
           }
         },
@@ -122,26 +111,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
       setLoading(true);
       http
         .post('/organizations/public/subscribe', data)
-        .then(({ data }) => {
-          toast.success(t('successfullyRegistered'));
-          store.userInfo = data;
-          store.information = {
-            email: '',
-            firstName: '',
-            lastName: '',
-            nationality: 'JP',
-            gender: 'MALE',
-            dob: undefined,
-            phone: '',
-            phoneCountryCode: '+81',
-            zipCode: '',
-            prefecture: '',
-            municipality: '',
-            address: '',
-          };
-          store.memberType = '';
-          push('/success').then(() => setLoading(false));
-        })
+        .then(onfulfilled)
         .catch((error) => toast.error(error?.response?.data?.stack || error.message));
     }
   });
