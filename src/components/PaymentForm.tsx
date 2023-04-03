@@ -62,7 +62,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
     if (paymentMethod === 'CARD') {
       console.log({
         cardno: cardNumber,
-        expire: `20${expiryDate.substring(0, 2)}${expiryDate.substring(2)}`,
+        expire: `20${expiryDate.substring(2)}${expiryDate.substring(0, 2)}`,
         securitycode: cvv,
         holdername: cardholderName,
       });
