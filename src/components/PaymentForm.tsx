@@ -12,8 +12,8 @@ import { useDisclosure } from '@mantine/hooks';
 import { useForm, yupResolver } from '@mantine/form';
 import { Alert, Button, Input, Modal, Radio } from '@mantine/core';
 import { http, store } from '@/utilities';
-import { FiCheckCircle, FiChevronRight } from 'react-icons/fi';
 import TermsAndConditions from '@/pages/hotus/terms-and-conditions';
+import { FiCheckCircle, FiChevronRight } from 'react-icons/fi';
 
 export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
   const { t } = useTranslation();
