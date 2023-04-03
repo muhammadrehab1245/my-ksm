@@ -1,4 +1,5 @@
-import { FC } from 'react';
+import type { FC } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import clsx from 'clsx';
@@ -18,6 +19,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
   const { t } = useTranslation();
   const { push } = useRouter();
   const { information, selectedPlan } = store;
+  const [loading, setLoading] = useState(false);
 
   const [opened, { toggle }] = useDisclosure(false);
 
@@ -89,6 +91,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
           if (resultCode != '000') {
             toast.error(t('cardError'));
           } else {
+            setLoading(true);
             http
               .post('/organizations/public/subscribe', { ...data, cardToken: tokenObject?.token })
               .then(({ data }) => {
@@ -109,13 +112,14 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
                   address: '',
                 };
                 store.memberType = '';
-                push('/success');
+                push('/success').then(() => setLoading(false));
               })
               .catch((error) => toast.error(error?.response?.data?.stack || error.message));
           }
         },
       );
     } else {
+      setLoading(true);
       http
         .post('/organizations/public/subscribe', data)
         .then(({ data }) => {
@@ -136,7 +140,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
             address: '',
           };
           store.memberType = '';
-          push('/success');
+          push('/success').then(() => setLoading(false));
         })
         .catch((error) => toast.error(error?.response?.data?.stack || error.message));
     }
@@ -231,7 +235,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
           {t('agreeAndContinue')}
         </Button>
       </Modal>
-      <Button fullWidth type="submit" disabled={values.acceptTos === false}>
+      <Button fullWidth type="submit" loading={loading} disabled={values.acceptTos === false}>
         {t('register')}
       </Button>
     </form>
