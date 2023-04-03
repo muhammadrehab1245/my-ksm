@@ -8,7 +8,7 @@ type Store = {
   memberType: string;
   selectedPlan: Plan;
 };
-export const information = {
+export const info = {
   email: '',
   firstName: '',
   lastName: '',
@@ -25,7 +25,7 @@ export const information = {
 
 export const store: Partial<Store> = proxy({
   memberType: '',
-  information,
+  information: info,
   selectedPlan: undefined,
   userInfo: undefined,
 });

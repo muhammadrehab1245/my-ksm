@@ -11,7 +11,7 @@ import { IMaskInput } from 'react-imask';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm, yupResolver } from '@mantine/form';
 import { Alert, Button, Input, Modal, Radio } from '@mantine/core';
-import { http, store } from '@/utilities';
+import { http, info, store } from '@/utilities';
 import TermsAndConditions from '@/pages/hotus/terms-and-conditions';
 import { FiCheckCircle, FiChevronRight } from 'react-icons/fi';
 
@@ -79,7 +79,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
     const onfulfilled = ({ data }: { data: any }) => {
       toast.success(t('successfullyRegistered'));
       store.userInfo = data;
-      store.information = information;
+      store.information = info;
       store.memberType = '';
       push('/success').then(() => setLoading(false));
     };
