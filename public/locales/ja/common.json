@@ -92,5 +92,6 @@
   "next": "次へ",
   "basicInformation": "会員情報入力",
   "selectPlan": "プランを選択",
-  "checkOut": "チェックアウト"
+  "checkOut": "チェックアウト",
+  "invalidCardExpiryDate": "無効なカード有効期限"
 }
