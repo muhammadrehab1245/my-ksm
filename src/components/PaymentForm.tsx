@@ -124,7 +124,10 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
         <Input.Wrapper withAsterisk label={t('cardNumber')} error={register('cardNumber').error}>
           <IMaskInput
             // @ts-ignore
-            className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
+            className={clsx(
+              'mantine-Input-input mantine-TextInput-input mantine-1j89rho',
+              register('cardNumber').error && 'border-red-500 placeholder-red-500',
+            )}
             mask="0000 0000 0000 0000"
             unmask={true}
             onAccept={(value: any) => setFieldValue('cardNumber', value)}
@@ -135,7 +138,10 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
           <Input.Wrapper withAsterisk label={t('expiryDate')} error={register('expiryDate').error}>
             <IMaskInput
               // @ts-ignore
-              className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
+              className={clsx(
+                'mantine-Input-input mantine-TextInput-input mantine-1j89rho',
+                register('expiryDate').error && 'border-red-500 placeholder-red-500',
+              )}
               mask="m/y"
               blocks={{
                 m: { mask: MaskedRange, from: 1, to: 12 },
@@ -149,7 +155,10 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
           <Input.Wrapper withAsterisk label={t('cvv')} error={register('cvv').error}>
             <IMaskInput
               // @ts-ignore
-              className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
+              className={clsx(
+                'mantine-Input-input mantine-TextInput-input mantine-1j89rho',
+                register('cvv').error && 'border-red-500 placeholder-red-500',
+              )}
               mask={Number}
               min={0}
               max={9999}
@@ -162,7 +171,10 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
         <Input.Wrapper withAsterisk label={t('cardholderName')} error={register('cardholderName').error}>
           <IMaskInput
             // @ts-ignore
-            className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
+            className={clsx(
+              'mantine-Input-input mantine-TextInput-input mantine-1j89rho',
+              register('cardholderName').error && 'border-red-500 placeholder-red-500',
+            )}
             mask={/^[A-Za-z ]+$/}
             unmask={true}
             onAccept={(value: any) => setFieldValue('cardholderName', value)}
@@ -189,7 +201,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
         </span>
         <FiChevronRight />
       </button>
-      <Modal opened={opened} onClose={toggle} title={t('termsAndConditions')} size="xl" classNames={{ title: 'h3' }} centered>
+      <Modal opened={opened} onClose={toggle} title={t('termsAndConditions')} size="70vw" classNames={{ title: 'h3' }} centered>
         <Alert>
           <TermsAndConditions />
         </Alert>

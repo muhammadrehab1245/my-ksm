@@ -15,6 +15,7 @@ import { useCountries, usePrefectures, useSearchZipcode } from '@/hooks/fetch';
 import { countryCodes, http, store } from '@/utilities';
 import { FiCalendar } from 'react-icons/fi';
 import 'dayjs/locale/ja';
+import clsx from 'clsx';
 
 export default function Information() {
   const { t } = useTranslation();
@@ -131,7 +132,10 @@ export default function Information() {
             <Input.Wrapper className="flex-1" label=" " error={register('phone').error}>
               <IMaskInput
                 // @ts-ignore
-                className="mantine-Input-input mantine-TextInput-input mantine-1j89rho"
+                className={clsx(
+                  'mantine-Input-input mantine-TextInput-input mantine-1j89rho',
+                  register('phone').error && 'border-red-500 placeholder-red-500',
+                )}
                 mask="00000000000"
                 value={values.phone}
                 unmask={true}
@@ -156,7 +160,10 @@ export default function Information() {
                 <div className="flex gap-2">
                   <IMaskInput
                     // @ts-ignore
-                    className="mantine-Input-input mantine-TextInput-input mantine-1j89rho w-48"
+                    className={clsx(
+                      'mantine-Input-input mantine-TextInput-input mantine-1j89rho w-48',
+                      register('zipCode').error && 'border-red-500 placeholder-red-500',
+                    )}
                     mask="0000000"
                     value={values.zipCode}
                     unmask={true}
