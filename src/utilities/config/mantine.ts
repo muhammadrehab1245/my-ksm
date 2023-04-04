@@ -30,9 +30,6 @@ export const mantineTheme: MantineThemeOverride = {
     },
   },
   globalStyles: (theme) => ({
-    '.mantine-Input-input,.mantine-DateTimePicker-input,.mantine-DatePicker-input': {
-      borderColor: theme.colors.gray[2],
-    },
     body: {
       color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
     },
