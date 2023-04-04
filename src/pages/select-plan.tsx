@@ -39,7 +39,7 @@ export default function SelectPlan() {
                     <img className="inline" src="/icons/mark.svg" alt="mark" />
                     <span className="absolute left-0 top-1.5 w-full text-center text-xl text-white">{index + 1}</span>
                   </div>
-                  <h2 className="text-2xl line-clamp-2">{item?.name}</h2>
+                  <h2 className="break-all text-2xl">{item?.name}</h2>
                   {item?.tags.map(({ name }, index) => (
                     <Badge className="mr-2 mb-2" key={index}>
                       {name}
