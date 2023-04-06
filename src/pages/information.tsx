@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import clsx from 'clsx';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
 import { IMaskInput } from 'react-imask';
@@ -12,10 +13,9 @@ import { DatePicker } from '@mantine/dates';
 import { useForm, yupResolver } from '@mantine/form';
 import { Button, Input, Radio, Select, Stepper, TextInput } from '@mantine/core';
 import { useCountries, usePrefectures, useSearchZipcode } from '@/hooks/fetch';
-import { countryCodes, http, store } from '@/utilities';
+import { countryDialCodes, http, store } from '@/utilities';
 import { FiCalendar } from 'react-icons/fi';
 import 'dayjs/locale/ja';
-import clsx from 'clsx';
 
 export default function Information() {
   const { t } = useTranslation();
@@ -128,7 +128,7 @@ export default function Information() {
             maxDate={new Date()}
           />
           <div className="flex gap-4">
-            <Select searchable withAsterisk label={t('phoneCountryCode')} data={countryCodes} {...register('phoneCountryCode')} />
+            <Select searchable withAsterisk label={t('phoneCountryCode')} data={countryDialCodes} {...register('phoneCountryCode')} />
             <Input.Wrapper className="flex-1" label=" " error={register('phone').error}>
               <IMaskInput
                 // @ts-ignore
