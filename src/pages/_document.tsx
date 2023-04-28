@@ -15,7 +15,7 @@ export default class _Document extends Document {
   }
   render() {
     return (
-      <Html lang="en">
+      <Html lang="ja">
         <Head>
           <link rel="icon" href="/icons/favicon.ico" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
