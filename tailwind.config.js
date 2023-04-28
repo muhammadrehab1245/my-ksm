@@ -8,8 +8,8 @@ module.exports = {
   content: ['./src/**/*.tsx'],
   theme: {
     fontFamily: {
-      sans: ['YuGothic', 'Yu Gothic', ...fontFamily.sans],
-      body: ['YuGothic', 'Yu Gothic', ...fontFamily.sans],
+      sans: ['Noto Sans JP', ...fontFamily.sans],
+      body: ['Noto Sans JP', ...fontFamily.sans],
     },
     gridAutoFit: {
       1: spacing[1],

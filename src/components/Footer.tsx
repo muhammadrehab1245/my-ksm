@@ -27,7 +27,7 @@ export const Footer = () => {
           </Link>
         </li>
       </ul>
-      <div>&copy; {new Date().getFullYear()}. 特定非営利活動法人グランドワークこしみず</div>
+      <div>&copy; {new Date().getFullYear()}. 特定非営利活動法人グラウンドワークこしみず</div>
     </footer>
   );
 };
