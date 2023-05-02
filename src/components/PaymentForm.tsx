@@ -97,13 +97,17 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
         },
         function ({ resultCode, tokenObject }: { resultCode: string; tokenObject: { token: string } }) {
           if (resultCode != '000') {
+            setLoading(false);
             toast.error(t('cardError'));
           } else {
             setLoading(true);
             http
               .post('/organizations/public/subscribe', { ...data, cardToken: tokenObject?.token })
               .then(onfulfilled)
-              .catch((error) => toast.error(error?.response?.data?.stack || error.message));
+              .catch((error) => {
+                toast.error(error?.response?.data?.stack || error.message);
+                setLoading(false);
+              });
           }
         },
       );
@@ -112,7 +116,10 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
       http
         .post('/organizations/public/subscribe', data)
         .then(onfulfilled)
-        .catch((error) => toast.error(error?.response?.data?.stack || error.message));
+        .catch((error) => {
+          setLoading(false);
+          toast.error(error?.response?.data?.stack || error.message);
+        });
     }
   });
 

@@ -1,17 +1,24 @@
 import type { GetStaticProps } from 'next';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Badge, Button, Stepper } from '@mantine/core';
 import { usePlans } from '@/hooks/fetch';
 import { store } from '@/utilities';
 import { Skeleton } from '@/components';
-import { useRouter } from 'next/router';
 
 export default function SelectPlan() {
   const { t } = useTranslation();
   const { memberType } = store;
   const { data } = usePlans({ memberType });
   const { push } = useRouter();
+
+  useEffect(() => {
+    if (!memberType) {
+      push('/');
+    }
+  }, []);
 
   return (
     <div className="my-12">

@@ -1,6 +1,7 @@
 import type { GetStaticProps } from 'next';
 import { Coupon } from '@/types';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import dayjs from 'dayjs';
@@ -11,8 +12,15 @@ import { store } from '@/utilities';
 import { PaymentForm, Skeleton } from '@/components';
 
 export default function Checkout() {
+  const { push } = useRouter();
   const { t } = useTranslation();
   const { selectedPlan, information } = store;
+
+  useEffect(() => {
+    if (!selectedPlan) {
+      push('/');
+    }
+  }, []);
 
   const [tempCouponCode, setTempCouponCode] = useState('');
   const [couponCode, setCouponCode] = useState('');

@@ -12,7 +12,7 @@ export default function Home() {
     <div className="flex h-screen flex-col">
       <div className="flex-1">
         <img className="w-full" src={'/images/banner.jpg'} alt="banner" />
-        <div className="relative z-10 mx-auto -mt-24 w-[420px] rounded bg-white px-8 pt-6 pb-10 shadow">
+        <div className="relative z-10 mx-auto -mt-24 w-[460px] max-w-full rounded bg-white px-8 pt-6 pb-10 shadow">
           <div className="space-y-4 text-center">
             <div className="justify-center">
               <img className="inline" src="/images/logo.svg" alt="hotus logo" />
