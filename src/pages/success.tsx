@@ -1,6 +1,7 @@
 import type { GetStaticProps } from 'next';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useSnapshot } from 'valtio';
@@ -11,11 +12,18 @@ import { store } from '@/utilities';
 import { FiCheckCircle } from 'react-icons/fi';
 
 export default function Success() {
+  const { push } = useRouter();
   const { t } = useTranslation();
   const { countries } = useCountries();
   const { userInfo } = useSnapshot(store);
   const [nationality, setNationality] = useState<string | undefined>();
   const [opened, { open, close }] = useDisclosure(false);
+
+  useEffect(() => {
+    if (!userInfo) {
+      push('/');
+    }
+  }, []);
 
   useEffect(() => {
     setNationality(countries?.find(({ value }) => value === userInfo?.user?.nationality)?.label);
