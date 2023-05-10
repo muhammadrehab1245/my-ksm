@@ -122,7 +122,9 @@ export interface Information {
   gender: string;
   dob: string;
   phone: string;
+  phoneCode: string;
   phoneCountryCode: string;
+  phoneFlagCode: string;
   zipCode: string;
   prefecture: string;
   municipality: string;

@@ -1,5 +1,3 @@
-import { uniqWith } from 'ramda';
-
 const list = [
   { name: '日本', dial_code: '+81', code: 'JP', flag: '🇯🇵' },
   { name: 'Afghanistan', dial_code: '+93', code: 'AF', flag: '🇦🇫' },
@@ -244,8 +242,7 @@ const list = [
   { name: 'Zimbabwe', dial_code: '+263', code: 'ZW', flag: '🇿🇼' },
 ];
 
-type ab = { name: string; dial_code: string; code: string; flag: string };
-export const countryDialCodes = uniqWith((a: ab, b: ab) => a.dial_code === b.dial_code)(list).map(({ name, dial_code, flag }) => ({
+export const countryDialCodes = list.map(({ name, dial_code, flag, code }) => ({
   label: `${flag} ${dial_code} ${name}`,
-  value: dial_code,
+  value: `${dial_code}-${code}`,
 }));

@@ -65,7 +65,7 @@ export default function Information() {
             })
             .then(({ data }) => {
               store.memberType = data?.memberType;
-              store.information = values;
+              store.information = { ...values, phoneCountryCode: values.phoneCode?.split('-')?.[0], phoneFlagCode: values.phoneCode?.split('-')?.[1] };
               push('/select-plan');
             });
         }
@@ -75,7 +75,7 @@ export default function Information() {
         .post('/members/member-type/search', { firstName: values.firstName, lastName: values.lastName, dob: dayjs(values.dob).format('YYYY-MM-DD') })
         .then(({ data }) => {
           store.memberType = data?.memberType;
-          store.information = values;
+          store.information = { ...values, phoneCountryCode: values.phoneCode?.split('-')?.[0], phoneFlagCode: values.phoneCode?.split('-')?.[1] };
           push('/select-plan');
         });
     }
@@ -128,7 +128,7 @@ export default function Information() {
             maxDate={new Date()}
           />
           <div className="flex gap-4">
-            <Select searchable withAsterisk label={t('phoneCountryCode')} data={countryDialCodes} {...register('phoneCountryCode')} />
+            <Select searchable withAsterisk label={t('phoneCountryCode')} data={countryDialCodes} {...register('phoneCode')} />
             <Input.Wrapper className="flex-1" label=" " error={register('phone').error}>
               <IMaskInput
                 // @ts-ignore
