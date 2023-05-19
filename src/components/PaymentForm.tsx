@@ -27,7 +27,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
     paymentMethod: string().required(t('required')),
     cardNumber: string().when('paymentMethod', {
       is: (pm: string) => pm === 'CARD',
-      then: (schema) => schema.required(t('required')),
+      then: (schema) => schema.required(t('required')).min(14, t('required')),
     }),
     expiryDate: string().when('paymentMethod', {
       is: (pm: string) => pm === 'CARD',
@@ -166,7 +166,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
                 'mantine-Input-input mantine-TextInput-input mantine-1j89rho',
                 register('cvv').error && 'border-red-500 placeholder-red-500',
               )}
-              mask={/^[0-9]+$/}
+              mask={/^[0-9]{1,4}$/}
               unmask={true}
               onAccept={(value: any) => setFieldValue('cvv', value)}
               placeholder={t('cvvPlaceholder')}
