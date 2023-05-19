@@ -16,7 +16,7 @@ export const info = {
   gender: 'MALE',
   dob: undefined,
   phone: '',
-  phoneCountryCode: '+81',
+  phoneCode: '+81-JP',
   zipCode: '',
   prefecture: '',
   municipality: '',

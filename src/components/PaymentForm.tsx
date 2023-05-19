@@ -166,9 +166,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
                 'mantine-Input-input mantine-TextInput-input mantine-1j89rho',
                 register('cvv').error && 'border-red-500 placeholder-red-500',
               )}
-              mask={Number}
-              min={0}
-              max={9999}
+              mask={/^[0-9]+$/}
               unmask={true}
               onAccept={(value: any) => setFieldValue('cvv', value)}
               placeholder={t('cvvPlaceholder')}
