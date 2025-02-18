@@ -74,6 +74,7 @@
   "memberNo": "会員番号",
   "selectedPlan": "選択したプラン",
   "successfullyRegistered": "会員登録が完了しました",
+  "registrationFailed": "申し訳ございませんが、お支払いは拒否されました。後ほどもう一度お試しください",
   "goBackToMainPage": "メインページへ戻る",
   "sendRegistrationInfoToEmail": "会員情報をメールへ送信",
   "sendRegistrationInfo": "会員情報送信",

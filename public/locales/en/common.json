@@ -47,6 +47,7 @@
   "membershipNo": "Membership No",
   "name": "name",
   "successfullyRegistered": "successfully registered",
+  "registrationFailed": "Sorry, the payment was declined please try again later.",
   "goBackToMainPage": "Go back to main page",
   "sendRegistrationInfoToEmail": "Send the registration to email",
   "sendRegistrationInfo": "send registration info",

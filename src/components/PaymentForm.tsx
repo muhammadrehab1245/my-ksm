@@ -76,12 +76,33 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
       orgId: process.env.NEXT_PUBLIC_HOTUS_ORG_ID,
     };
 
-    const onfulfilled = ({ data }: { data: any }) => {
+    const onfulfilled = async ({ data }: { data: any }) => {
+      // console.log('res:', data);
       toast.success(t('successfullyRegistered'));
       store.userInfo = data;
       store.information = info;
       store.memberType = '';
-      push('/success').then(() => setLoading(false));
+      sessionStorage.setItem('subscriptionId', data.subscriptionId);
+      if (paymentMethod === 'CARD') {
+        if (data.paymentDone) {
+          http
+            .post(`organizations/public/post-payment-subscribe?subscriptionId=${data.subscriptionId}&success=${data.paymentDone}`, {})
+            .then((response) => {
+              store.userInfo = response.data;
+              push('/success');
+            });
+        } else if (!data.redirectUrl || data.redirectUrl === '') {
+          http.post(`organizations/public/post-payment-subscribe?subscriptionId=${data.subscriptionId}&success=${false}`, {}).then((response) => {
+            store.userInfo = response.data;
+            push('/failure');
+          });
+        } else {
+          push(data.redirectUrl).then(() => setLoading(false));
+        }
+        setLoading(false);
+      } else {
+        push('/success').then(() => setLoading(false));
+      }
     };
 
     if (paymentMethod === 'CARD') {
@@ -102,7 +123,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
           } else {
             setLoading(true);
             http
-              .post('/organizations/public/subscribe', { ...data, cardToken: tokenObject?.token })
+              .post(`/organizations/public/subscribe-new?callBackUrl=${location.origin}/api/callback`, { ...data, cardToken: tokenObject?.token })
               .then(onfulfilled)
               .catch((error) => {
                 toast.error(error?.response?.data?.stack || error.message);
