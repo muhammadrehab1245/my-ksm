@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { http, store } from '@/utilities';
+import { Loader } from '@mantine/core';
 export default function Callback() {
   const router = useRouter();
   const { query, push } = router;
@@ -30,5 +31,9 @@ export default function Callback() {
     }
   }, [query]);
 
-  return <div>Callback Url</div>;
+  return (
+    <div className="mt-20 flex justify-center">
+      <Loader color="blue" />;
+    </div>
+  );
 }
