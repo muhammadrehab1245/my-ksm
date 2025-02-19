@@ -82,7 +82,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
       store.userInfo = data;
       store.information = info;
       store.memberType = '';
-      sessionStorage.setItem('subscriptionId', data.subscriptionId);
+
       if (paymentMethod === 'CARD') {
         if (data.paymentDone) {
           http
@@ -97,6 +97,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
             push('/failure');
           });
         } else {
+          sessionStorage.setItem('subscriptionId', data.subscriptionId);
           push(data.redirectUrl).then(() => setLoading(false));
         }
         setLoading(false);
