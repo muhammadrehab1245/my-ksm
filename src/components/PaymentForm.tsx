@@ -77,7 +77,7 @@ export const PaymentForm: FC<{ couponCode?: string }> = ({ couponCode }) => {
     };
 
     const onfulfilled = async ({ data }: { data: any }) => {
-      // console.log('res:', data);
+      console.log('new res:', data);
       toast.success(t('successfullyRegistered'));
       store.userInfo = data;
       store.information = info;
