@@ -21,7 +21,11 @@ export default function Callback() {
 
           http.post(`organizations/public/post-payment-subscribe?subscriptionId=${subscriptionId}&success=${success}`, {}).then((response) => {
             store.userInfo = response.data;
-            push('/success');
+            if (data) {
+              push('/success');
+            } else {
+              push('/failure');
+            }
           });
           sessionStorage.removeItem('subscriptionId');
         })
