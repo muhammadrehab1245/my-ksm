@@ -21,7 +21,7 @@ export default function Callback() {
 
           http.post(`organizations/public/post-payment-subscribe?subscriptionId=${subscriptionId}&success=${success}`, {}).then((response) => {
             store.userInfo = response.data;
-            if (data) {
+            if (success) {
               push('/success');
             } else {
               push('/failure');
